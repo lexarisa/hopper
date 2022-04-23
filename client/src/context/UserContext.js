@@ -9,29 +9,24 @@ export function useUser() {
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  function login(loginInfo) {
-    console.log({ loginInfo });
-    fetch('http://localhost:3002/users/login', {
-      method: 'POST',
-      body: JSON.stringify(loginInfo),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((res) => {
-        console.log('res', res);
-        if (!res.ok) throw new Error('Something went wrong');
-
-        res.json().then((loginuser) => {
-          console.log('useronLogin', loginuser);
-          setUser(loginuser);
-        });
-      })
-      .catch((e) => console.log(e));
+  async function login(loginInfo) {
+    try {
+      const res = fetch('http://localhost:3002/users/login', {
+        method: 'POST',
+        body: JSON.stringify(loginInfo),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const loginUser = await res.json();
+      setUser(loginUser);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function createUser(user) {
-    console.log(user, 'hello');
-
     try {
       const res = await fetch('http://localhost:3002/users', {
         method: 'POST',
@@ -40,37 +35,43 @@ export function UserProvider({ children }) {
       });
 
       const newUser = await res.json();
-      console.log('user', newUser);
+
       setUser(newUser);
+      console.log('user', user);
+      storeData(newUser);
+      setIsLoggedIn(true);
     } catch (error) {
+      // display error on ui
       console.log(error);
     }
 
-    // fetch('http://localhost:3002/users', {
-    //   method: 'POST',
-    //   body: JSON.stringify(user),
-    //   headers: { 'Content-Type': 'application/json' },
-    // })
-    // .then(async (res) => {
-    //   console.log('response', res);
-    //   // if (!res.ok) throw new Error('Something went wrong');
-    //   return await res.json();
-    // })
-    // .then((user) => {
-    //   setUser(user);
-    //   console.log('userrr', user);
-    // })
-    // .catch((e) => console.log(e));
+    console.log('userrunningoutside', user);
   }
 
-  // const _storeData = async (value) => {
-  //   try {
-  //     const jsonValue = JSON.stringify(value)
-  //     const value = await AsyncStorage.setItem()
-  //   } catch (error) {
+  const logout = () => {
+    setIsLoggedIn(false);
+    setUser(null);
+  };
 
-  //   }
-  // }
-  const value = { login, createUser, setUser };
+  const storeData = async (user) => {
+    try {
+      const key = JSON.stringify(user.id);
+      const jsonValue = JSON.stringify(user);
+      await AsyncStorage.setItem(key, jsonValue);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getData = async (user) => {
+    try {
+      const key = JSON.stringify(user.id);
+      const value = await AsyncStorage.getItem(key);
+      return value !== null ? JSON.parse(value) : null;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const value = { login, logout, createUser, setUser, user, isLoggedIn };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

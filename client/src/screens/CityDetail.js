@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 import { useFetch } from '../services/useFetch';
 import { NUMBEO_API_KEY } from '@env';
 import { UNSPLASH_ACCESS_KEY } from '@env';
-import { CustomButton } from './CustomButton';
+import { CustomButton } from '../components/CustomButton';
+import { useUser } from '../context/UserContext';
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
-
+  const { user } = useUser();
   const { item } = route.params;
 
   const { data } = useFetch(
@@ -90,13 +91,14 @@ export const CityDetail = ({ navigation, route }) => {
         );
       })}
 
-      <CustomButton text="Join the Community" onPress={handleJoinRoom} />
-      {/* <Button
-        title="Join the Community"
-        accessibilityLabel="Connect to people"
-        color="#007AFF"
-        onPress={() => handleJoinRoom()}
-      /> */}
+      {user ? (
+        <CustomButton text="Join the Community" onPress={handleJoinRoom} />
+      ) : (
+        <CustomButton
+          text="Join the Community"
+          onPress={() => navigation.navigate('Register')}
+        />
+      )}
     </View>
   );
 };

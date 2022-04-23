@@ -19,10 +19,11 @@ export const Messages = ({ route }) => {
     socket.emit('joinRoom', item.id, (message) => {
       setNotification(message);
     });
-    fetchMessages();
+
     socket.on('receive-message', (msg) =>
       setChatMessages((prevMsg) => [...prevMsg, msg])
     );
+    fetchMessages();
 
     //cleanup
     return () => {

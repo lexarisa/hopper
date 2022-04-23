@@ -1,20 +1,23 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { useUser } from '../context/UserContext';
 
 export const Profile = () => {
+  const { user, logout } = useUser();
   //fetch user data
   return (
     <SafeAreaView>
       <View>
-        <Text>Hello, User</Text>
+        <Text style={styles.greeting}>Hello, {user.username}</Text>
       </View>
       <Text>Inbox</Text>
-      {/* <View>
-        {chatMessages.map((chatMessage) => (
-          <Text style={styles.text} key={chatMessage.id}>
-            {chatMessage.message}
-          </Text>
-        ))}
-      </View> */}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  greeting: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    margin: 20,
+  },
+});

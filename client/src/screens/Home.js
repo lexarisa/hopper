@@ -10,12 +10,14 @@ import {
 import { useState } from 'react';
 import { CityCard } from '../components/CityCard';
 import { useCity } from '../services/useCity';
-
-// import { UNSPLASH_ACCESS_KEY } from '@env';
+import { useUser } from '../context/UserContext';
 
 export const Home = ({ navigation }) => {
   const { cities } = useCity();
   const [search, setSearch] = useState('');
+  const { user, isLoggedIn } = useUser();
+
+  console.log('areyouloggedin', isLoggedIn);
 
   const handleSearch = (searchValue) => {
     if (searchValue === '') return;
@@ -26,11 +28,18 @@ export const Home = ({ navigation }) => {
     <>
       <View style={styles.header}>
         <ImageBackground style={styles.headerBg}>
-          <View style={styles.join}>
-            <Pressable onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.joinText}>Join</Text>
-            </Pressable>
-          </View>
+          {isLoggedIn ? (
+            <View style={[styles.headerGreeting]}>
+              <Text style={styles.joinText}>Hello, {user.username}</Text>
+            </View>
+          ) : (
+            <View style={[styles.join, styles.headerGreeting]}>
+              <Pressable onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.joinText}>Join</Text>
+              </Pressable>
+            </View>
+          )}
+
           <View style={styles.tagline}>
             <Text style={styles.taglineText}>
               Discover your new remote working location
@@ -50,7 +59,7 @@ export const Home = ({ navigation }) => {
       <View style={styles.container}>
         {cities ? (
           <FlatList
-            data={cities.slice(0, 50)}
+            data={cities.slice(0, 60)}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <Pressable
@@ -94,11 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   join: {
-    alignSelf: 'flex-end',
-    margin: 20,
     backgroundColor: '#3B71F3',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
     borderRadius: 10,
     shadowColor: '#000000',
     shadowOpacity: 0.3,
@@ -108,22 +113,31 @@ const styles = StyleSheet.create({
       width: 1,
     },
   },
+  headerGreeting: {
+    alignSelf: 'flex-end',
+    margin: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
   tagline: {
     margin: 10,
   },
   joinText: {
     color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   taglineText: {
     fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center',
     margin: 5,
+    color: 'white',
   },
   headerBg: {
     height: '100%',
     width: '100%',
-    backgroundColor: '#D9AFD9',
+    backgroundColor: '#72A0C1',
     shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 1,
