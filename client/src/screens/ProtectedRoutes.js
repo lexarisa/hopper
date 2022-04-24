@@ -12,10 +12,26 @@ const Tab = createBottomTabNavigator();
 export const ProtectedRoutes = () => {
   return (
     <ProtectedRoutesStack.Navigator>
-      <ProtectedRoutesStack.Screen name="Home" component={Home} />
-      <ProtectedRoutesStack.Screen name="CityDetail" component={CityDetail} />
-      <ProtectedRoutesStack.Screen name="Messages" component={Messages} />
-      <ProtectedRoutesStack.Screen name="Profile" component={Profile} />
+      <ProtectedRoutesStack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      <ProtectedRoutesStack.Screen
+        name="CityDetail"
+        component={CityDetail}
+        options={{ headerShown: false }}
+      />
+      <ProtectedRoutesStack.Screen
+        name="Messages"
+        component={Messages}
+        options={{ headerShown: false }}
+      />
+      <ProtectedRoutesStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
     </ProtectedRoutesStack.Navigator>
   );
 };

@@ -7,6 +7,9 @@ export const Profile = () => {
   return (
     <SafeAreaView>
       <View>
+        <View style={styles.userImg}>
+          <Text style={styles.username}>{user.username.charAt(0)}</Text>
+        </View>
         <Text style={styles.greeting}>Hello, {user.username}</Text>
       </View>
       <Text>Inbox</Text>
@@ -20,4 +23,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 20,
   },
+  userImg: {},
 });

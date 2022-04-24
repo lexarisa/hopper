@@ -1,10 +1,18 @@
-import { Text, View, Image, StyleSheet, Button } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFetch } from '../services/useFetch';
 import { NUMBEO_API_KEY } from '@env';
 import { UNSPLASH_ACCESS_KEY } from '@env';
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
+import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
+
+const testData = [
+  { quarter: 1, earnings: 13000 },
+  { quarter: 2, earnings: 16500 },
+  { quarter: 3, earnings: 14250 },
+  { quarter: 4, earnings: 19000 },
+];
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
@@ -37,7 +45,8 @@ export const CityDetail = ({ navigation, route }) => {
           );
         })
         .then((data) => {
-          setCityDetail([parser2(data)]);
+          console.log(data[1]);
+          setCityDetail([[...parser(data)], [parser2(data)]]);
         });
     } catch (error) {
       console.log(error);
@@ -45,16 +54,22 @@ export const CityDetail = ({ navigation, route }) => {
   };
 
   const parser = (dataToParse) => {
-    return dataToParse[0].prices.map((price) => {
-      return {
-        meal: price.item_name,
-        mealPrice: price.average_price,
-      };
-    });
+    const handPickedData = [1, 4, 18, 26, 27, 30, 105];
+    //filter to get only the id i want
+    return dataToParse[0].prices
+      .filter((item) => handPickedData.includes(item.item_id))
+      .map((item) => {
+        return {
+          item: item.item_name,
+          itemPrice: item.average_price,
+          id: item.item_id,
+        };
+      });
   };
 
   const parser2 = (dataToParse) => {
     return {
+      id: dataToParse[1].city_id,
       crimeIndex: dataToParse[1].crime_index,
       qualityOfLife: dataToParse[1].quality_of_life_index,
       safetyIndex: dataToParse[1].safety_index,
@@ -68,46 +83,82 @@ export const CityDetail = ({ navigation, route }) => {
     navigation.navigate('Messages', { item });
   };
 
+  console.log('hello', cityDetail);
   return (
-    <View>
-      {data.length > 0 && (
-        <View>
-          <Image source={{ uri: data[1].image }} style={styles.image} />
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.cityImg}>
+        {data.length > 0 && (
+          <View>
+            <Image source={{ uri: data[1].image }} style={styles.image} />
+          </View>
+        )}
+        <View style={styles.cityName}>
+          <Text style={styles.name}>
+            {item.city}, {item.country}
+          </Text>
         </View>
-      )}
+        {cityDetail.length > 1 &&
+          cityDetail[0].map((item) => {
+            return (
+              <View key={item.id} style={styles.container}>
+                <Text>
+                  {item.item}: ${Math.round(item.itemPrice)}
+                </Text>
+              </View>
+            );
+          })}
+        {cityDetail.length > 1 &&
+          cityDetail[1].map((item) => {
+            return (
+              <View key={item.id} style={styles.container}>
+                <Text>Crime {item.crimeIndex}</Text>
+                <Text>Quality of Life: {item.qualityOfLife}</Text>
+                <Text>Rent: {item.rentIndex}</Text>
+                <Text>Restaurant Price: {item.restaurantPriceIndex}</Text>
+                <Text>Safety: {item.safetyIndex}</Text>
+                <Text>Traffic: {item.trafficIndex}</Text>
+              </View>
+            );
+          })}
 
-      {cityDetail.map((item, index) => {
-        return (
-          <>
-            <View key={index} style={styles.container}>
-              <Text>Crime {item.crimeIndex}</Text>
-              <Text>Quality of Life: {item.qualityOfLife}</Text>
-              <Text>Rent: {item.rentIndex}</Text>
-              <Text>Restaurant Price: {item.restaurantPriceIndex}</Text>
-              <Text>Safety: {item.safetyIndex}</Text>
-              <Text>Traffic: {item.trafficIndex}</Text>
-            </View>
-          </>
-        );
-      })}
-
-      {user ? (
-        <CustomButton text="Join the Community" onPress={handleJoinRoom} />
-      ) : (
-        <CustomButton
-          text="Join the Community"
-          onPress={() => navigation.navigate('Register')}
-        />
-      )}
-    </View>
+        <VictoryChart width={350}>
+          <VictoryBar data={testData} x="quarter" y="earnings" />
+        </VictoryChart>
+        <View style={styles.button}>
+          {user ? (
+            <CustomButton text="Join the Community" onPress={handleJoinRoom} />
+          ) : (
+            <CustomButton
+              text="Join the Community"
+              onPress={() => navigation.navigate('Register')}
+            />
+          )}
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollView: {
+    marginVertical: 20,
+  },
   image: {
     height: 200,
   },
   container: {
-    margin: 20,
+    marginHorizontal: 20,
+  },
+  cityImg: {},
+  cityName: {},
+  name: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  button: {
+    marginHorizontal: 25,
+    marginVertical: 20,
   },
 });

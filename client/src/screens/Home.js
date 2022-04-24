@@ -11,13 +11,12 @@ import { useState } from 'react';
 import { CityCard } from '../components/CityCard';
 import { useCity } from '../services/useCity';
 import { useUser } from '../context/UserContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const Home = ({ navigation }) => {
   const { cities } = useCity();
   const [search, setSearch] = useState('');
   const { user, isLoggedIn } = useUser();
-
-  console.log('areyouloggedin', isLoggedIn);
 
   const handleSearch = (searchValue) => {
     if (searchValue === '') return;
@@ -25,25 +24,27 @@ export const Home = ({ navigation }) => {
   };
 
   return (
-    <>
+    <View style={styles.app}>
       <View style={styles.header}>
         <ImageBackground style={styles.headerBg}>
-          {isLoggedIn ? (
-            <View style={[styles.headerGreeting]}>
-              <Text style={styles.joinText}>Hello, {user.username}</Text>
-            </View>
-          ) : (
-            <View style={[styles.join, styles.headerGreeting]}>
-              <Pressable onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.joinText}>Join</Text>
-              </Pressable>
-            </View>
-          )}
+          <View style={styles.headerContent}>
+            {isLoggedIn ? (
+              <View style={[styles.headerGreeting]}>
+                <Text style={styles.joinText}>Hello, {user.username}</Text>
+              </View>
+            ) : (
+              <View style={[styles.join, styles.headerGreeting]}>
+                <Pressable onPress={() => navigation.navigate('Register')}>
+                  <Text style={styles.joinText}>Join</Text>
+                </Pressable>
+              </View>
+            )}
 
-          <View style={styles.tagline}>
-            <Text style={styles.taglineText}>
-              Discover your new remote working location
-            </Text>
+            <View style={styles.tagline}>
+              <Text style={styles.taglineText}>
+                Discover your new remote working location
+              </Text>
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -76,18 +77,24 @@ export const Home = ({ navigation }) => {
           <Text>No Cities to show</Text>
         )}
       </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    borderWidth: 1,
-    borderColor: 'grey',
-    padding: 10,
+    backgroundColor: '#E8E8E8',
+    padding: 15,
     marginVertical: 20,
     marginHorizontal: 15,
     borderRadius: 15,
+  },
+  headerContent: {
+    paddingVertical: 30,
+    marginVertical: 20,
+  },
+  app: {
+    backgroundColor: 'white',
   },
 
   column: {
@@ -98,8 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    height: '30%',
-    justifyContent: 'flex-start',
+    height: '25%',
     alignItems: 'center',
   },
   join: {
@@ -131,8 +137,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     textAlign: 'center',
-    margin: 5,
+    marginTop: 15,
     color: 'white',
+    flexWrap: 'wrap',
   },
   headerBg: {
     height: '100%',

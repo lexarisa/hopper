@@ -10,7 +10,11 @@ export const PublicRoutes = () => {
   return (
     <NavigationContainer>
       <PublicRoutesStack.Navigator>
-        <PublicRoutesStack.Screen name="Home" component={Home} />
+        <PublicRoutesStack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
         <PublicRoutesStack.Screen name="CityDetail" component={CityDetail} />
         <PublicRoutesStack.Screen
           name="Login"

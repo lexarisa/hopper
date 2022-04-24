@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import io from 'socket.io-client';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { NavigationRouteContext } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 
 const socket = io('http://192.168.1.177:3002');

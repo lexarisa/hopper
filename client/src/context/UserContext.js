@@ -13,12 +13,13 @@ export function UserProvider({ children }) {
 
   async function login(loginInfo) {
     try {
-      const res = fetch('http://localhost:3002/users/login', {
+      const res = await fetch('http://localhost:3002/users/login', {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'Content-Type': 'application/json' },
       });
       const loginUser = await res.json();
+      console.log(loginUser);
       setUser(loginUser);
       setIsLoggedIn(true);
     } catch (error) {

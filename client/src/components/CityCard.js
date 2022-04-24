@@ -17,7 +17,7 @@ export const CityCard = ({ city, country }) => {
     <View style={styles.container}>
       {data.length > 0 && (
         <ImageBackground
-          source={{ uri: data[0].image }}
+          source={{ uri: data[1].image }}
           style={styles.image}
           resizeMode="cover"
         >
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 20,
     margin: 10,
-
     shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 1,
@@ -49,10 +48,12 @@ const styles = StyleSheet.create({
   cityName: {
     color: 'white',
     fontWeight: 'bold',
+    paddingTop: 10,
   },
   countryName: {
     color: 'white',
     fontWeight: 'bold',
+    paddingBottom: 10,
   },
   container: {
     borderRadius: 10,
