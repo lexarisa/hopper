@@ -5,10 +5,14 @@ async function joinCommunity(req, res) {
   try {
     const { userId, communityId } = req.body;
 
+    console.log(typeof communityId);
+
     //check if user already in community
     const userAlreadyInCommunity = await CommunityMember.find({
       communityId,
     });
+
+    console.log(userAlreadyInCommunity);
 
     if (userAlreadyInCommunity.length > 1) return;
     // create new user if not already in community
@@ -28,7 +32,6 @@ async function joinCommunity(req, res) {
 async function getCommunityMemberships(req, res) {
   try {
     const { userId } = req.params;
-
     const communityMembers = await CommunityMember.find({
       userId: userId,
     });

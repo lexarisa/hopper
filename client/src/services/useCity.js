@@ -9,6 +9,8 @@ export const useCity = (url) => {
   }, []);
 
   const fetchData = async () => {
+    // use await syntax
+
     try {
       fetch(
         `https://www.numbeo.com/api/rankings_by_city_current?api_key=${NUMBEO_API_KEY}&section=1`

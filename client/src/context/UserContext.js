@@ -19,7 +19,7 @@ export function UserProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
       });
       const loginUser = await res.json();
-      console.log(loginUser);
+
       setUser(loginUser);
       setIsLoggedIn(true);
     } catch (error) {
@@ -38,7 +38,7 @@ export function UserProvider({ children }) {
       const newUser = await res.json();
 
       setUser(newUser);
-      console.log('user', user);
+
       storeData(newUser);
       setIsLoggedIn(true);
     } catch (error) {

@@ -5,7 +5,7 @@ const communityMemberSchema = new Schema({
   //warning ???
   userId: mongoose.Types.ObjectId,
   // userId: { type: mongoose.Types.ObjectId },
-  communityId: String,
+  communityId: Number,
 });
 
 const CommunityMember = mongoose.model(

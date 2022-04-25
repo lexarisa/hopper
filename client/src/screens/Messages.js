@@ -14,9 +14,10 @@ export const Messages = ({ route }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [notification, setNotification] = useState('');
   const { user } = useUser();
-  const { item } = route.params;
+  const { item } = route.params; //string
 
   useEffect(() => {
+    fetchMessages();
     addUserToCommunity({ userId: user.id, communityId: item.id });
     socket.emit('joinRoom', item.id, (message) => {
       setNotification(message);
@@ -25,7 +26,6 @@ export const Messages = ({ route }) => {
     socket.on('receive-message', (msg) =>
       setChatMessages((prevMsg) => [...prevMsg, msg])
     );
-    fetchMessages();
 
     //cleanup
     return () => {
@@ -34,7 +34,6 @@ export const Messages = ({ route }) => {
   }, []);
 
   const addUserToCommunity = async (user) => {
-    console.log('running');
     try {
       const res = await fetch(`${SERVERURL}/communities`, {
         method: 'POST',
@@ -47,6 +46,7 @@ export const Messages = ({ route }) => {
     }
   };
   const fetchMessages = async () => {
+    console.log('fetchMessages()');
     try {
       fetch(`${SERVERURL}/messages/${item.id}`)
         .then((res) => {
@@ -84,11 +84,13 @@ export const Messages = ({ route }) => {
 
     if (textNotEmpty) {
       const messageModel = {
+        userId: user.id,
         content: singleMessage,
         communityId: item.id,
         createdAt: new Date(),
       };
       socket.emit('sendMessage', messageModel, item.id);
+      setChatMessages((prevMsg) => [...prevMsg, messageModel]);
 
       postMessage(messageModel);
       setSingleMessage('');
@@ -102,13 +104,14 @@ export const Messages = ({ route }) => {
       <View style={styles.chat}>
         <FlatList
           data={chatMessages}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <View style={styles.messageBox}>
               <View style={styles.userDetail}>
                 <View style={styles.image}></View>
                 <Text style={styles.username}>{item._id}</Text>
               </View>
+
               <Text style={styles.message}>{item.content}</Text>
             </View>
           )}

@@ -21,7 +21,6 @@ export const Home = ({ navigation }) => {
     if (searchValue === '') return;
   };
 
-  console.log('cities', cities);
   return (
     <View style={styles.app}>
       <View style={styles.header}>
@@ -59,7 +58,7 @@ export const Home = ({ navigation }) => {
       <View style={styles.container}>
         {cities ? (
           <FlatList
-            data={cities.slice(0, 60)}
+            data={cities.slice(0, 50)}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <Pressable
