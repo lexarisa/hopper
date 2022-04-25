@@ -18,7 +18,7 @@ export const Messages = ({ route }) => {
 
   useEffect(() => {
     fetchMessages();
-    addUserToCommunity({ userId: user.id, communityId: item.id });
+
     socket.emit('joinRoom', item.id, (message) => {
       setNotification(message);
     });
@@ -46,7 +46,6 @@ export const Messages = ({ route }) => {
     }
   };
   const fetchMessages = async () => {
-    console.log('fetchMessages()');
     try {
       fetch(`${SERVERURL}/messages/${item.id}`)
         .then((res) => {
@@ -91,8 +90,8 @@ export const Messages = ({ route }) => {
       };
       socket.emit('sendMessage', messageModel, item.id);
       setChatMessages((prevMsg) => [...prevMsg, messageModel]);
-
       postMessage(messageModel);
+      addUserToCommunity({ userId: user.id, communityId: item.id });
       setSingleMessage('');
     } else {
       console.log('text empty');
@@ -109,9 +108,8 @@ export const Messages = ({ route }) => {
             <View style={styles.messageBox}>
               <View style={styles.userDetail}>
                 <View style={styles.image}></View>
-                <Text style={styles.username}>{item._id}</Text>
+                <Text style={styles.username}>{item.userId}</Text>
               </View>
-
               <Text style={styles.message}>{item.content}</Text>
             </View>
           )}

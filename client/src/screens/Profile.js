@@ -1,24 +1,34 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+} from 'react-native';
 import { useUser } from '../context/UserContext';
 import { useEffect, useState } from 'react';
 import { SERVERURL } from '../utils/index.utils';
 import { useCity } from '../services/useCity';
+import { ChatLog } from '../components/ChatLog';
+import { useIsFocused } from '@react-navigation/native';
 
-export const Profile = () => {
+export const Profile = ({ navigation }) => {
   const { user, logout } = useUser();
   const [communitiesJoined, setCommunitiesJoined] = useState([]);
   const { cities } = useCity();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     fetchCommunitiesJoined();
-  }, []);
+  }, [isFocused]);
 
   const fetchCommunitiesJoined = async () => {
-    console.log('fetchCommunitieddsJoined()');
+    console.log('fetchCommunitiesJoined()');
     try {
       const res = await fetch(`${SERVERURL}/communities/${user.id}`);
       const communityMember = await res.json();
-      console.log(communityMember);
+      console.log('>>>', communityMember);
       setCommunitiesJoined(communityMember);
     } catch (error) {
       console.log(error);
@@ -33,25 +43,32 @@ export const Profile = () => {
     return communitiesIdUsersIn.includes(city.id);
   });
 
+  //how to navigate back to chatroom
+
   console.log(listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>
-        <View>
+        <View style={styles.user}>
           <View style={styles.userImg}>
             <Text style={styles.username}>{user.username.charAt(0)}</Text>
           </View>
           <Text style={styles.greeting}>Hello, {user.username}</Text>
         </View>
-        <Text>Inbox</Text>
+        <Text style={styles.header}>Your Communities</Text>
         <View style={styles.container}>
           {listOfCommunities.map((community) => {
             return (
-              <View key={community.id} style={styles.content}>
-                <Text style={styles.text}>
-                  {community.city}, {community.country}
-                </Text>
-              </View>
+              <Pressable
+                key={community.id}
+                onPress={() => navigation.navigate('Messages')}
+              >
+                <ChatLog
+                  country={community.country}
+                  city={community.city}
+                  id={community.id}
+                />
+              </Pressable>
             );
           })}
         </View>
@@ -61,26 +78,37 @@ export const Profile = () => {
 };
 
 const styles = StyleSheet.create({
+  user: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 20,
+    marginBottom: 10,
+  },
+  username: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 18,
+  },
   greeting: {
     fontWeight: 'bold',
     fontSize: 20,
     margin: 20,
   },
-  userImg: {},
+  userImg: {
+    backgroundColor: 'pink',
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
   container: {
     margin: 10,
   },
-  content: {
-    padding: 20,
-    marginVertical: 8,
-    backgroundColor: '#F9FBFC',
-    borderRadius: 5,
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 0.5,
-      width: 1,
-    },
+
+  header: {
+    fontSize: 18,
+    marginHorizontal: 25,
   },
 });
