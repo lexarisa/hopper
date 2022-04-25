@@ -6,6 +6,7 @@ import { UNSPLASH_ACCESS_KEY } from '@env';
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
+import { parser, parser2 } from '../utils/index.utils';
 
 const testData = [
   { quarter: 1, earnings: 13000 },
@@ -45,7 +46,6 @@ export const CityDetail = ({ navigation, route }) => {
           );
         })
         .then((data) => {
-          console.log(data[1]);
           setCityDetail([[...parser(data)], [parser2(data)]]);
         });
     } catch (error) {
@@ -53,37 +53,10 @@ export const CityDetail = ({ navigation, route }) => {
     }
   };
 
-  const parser = (dataToParse) => {
-    const handPickedData = [1, 4, 18, 26, 27, 30, 105];
-    //filter to get only the id i want
-    return dataToParse[0].prices
-      .filter((item) => handPickedData.includes(item.item_id))
-      .map((item) => {
-        return {
-          item: item.item_name,
-          itemPrice: item.average_price,
-          id: item.item_id,
-        };
-      });
-  };
-
-  const parser2 = (dataToParse) => {
-    return {
-      id: dataToParse[1].city_id,
-      crimeIndex: dataToParse[1].crime_index,
-      qualityOfLife: dataToParse[1].quality_of_life_index,
-      safetyIndex: dataToParse[1].safety_index,
-      restaurantPriceIndex: dataToParse[1].restaurant_price_index,
-      trafficIndex: dataToParse[1].traffic_index,
-      rentIndex: dataToParse[1].rent_index,
-    };
-  };
-
   const handleJoinRoom = () => {
     navigation.navigate('Messages', { item });
   };
 
-  console.log('hello', cityDetail);
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.cityImg}>

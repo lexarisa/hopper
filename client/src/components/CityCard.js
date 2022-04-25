@@ -21,8 +21,10 @@ export const CityCard = ({ city, country }) => {
           style={styles.image}
           resizeMode="cover"
         >
-          <Text style={styles.cityName}>{city}</Text>
-          <Text style={styles.countryName}>{country}</Text>
+          <View style={styles.cardContent}>
+            <Text style={styles.cityName}>{city}</Text>
+            <Text style={styles.countryName}>{country}</Text>
+          </View>
         </ImageBackground>
       )}
     </View>
@@ -59,5 +61,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     minWidth: 180,
     minHeight: 100,
+  },
+  cardContent: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

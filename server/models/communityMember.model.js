@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const communityMemberSchema = new Schema({
   //warning ???
-  userId: { type: mongoose.Types.ObjectId },
+  userId: mongoose.Types.ObjectId,
+  // userId: { type: mongoose.Types.ObjectId },
   communityId: String,
 });
 

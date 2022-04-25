@@ -45,8 +45,6 @@ export function UserProvider({ children }) {
       // display error on ui
       console.log(error);
     }
-
-    console.log('userrunningoutside', user);
   }
 
   const logout = () => {

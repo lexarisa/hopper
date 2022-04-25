@@ -17,16 +17,8 @@ export const ProtectedRoutes = () => {
         component={Home}
         options={{ headerShown: false }}
       />
-      <ProtectedRoutesStack.Screen
-        name="CityDetail"
-        component={CityDetail}
-        options={{ headerShown: false }}
-      />
-      <ProtectedRoutesStack.Screen
-        name="Messages"
-        component={Messages}
-        options={{ headerShown: false }}
-      />
+      <ProtectedRoutesStack.Screen name="CityDetail" component={CityDetail} />
+      <ProtectedRoutesStack.Screen name="Messages" component={Messages} />
       <ProtectedRoutesStack.Screen
         name="Profile"
         component={Profile}

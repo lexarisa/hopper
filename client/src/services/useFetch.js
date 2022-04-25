@@ -15,14 +15,14 @@ export const useFetch = (url) => {
           return res.json();
         })
         .then((data) => {
-          setData(parser(data));
+          setData(imageParser(data));
         });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const parser = (dataToParse) => {
+  const imageParser = (dataToParse) => {
     return dataToParse.results.map((item) => {
       return {
         id: item.user.id,

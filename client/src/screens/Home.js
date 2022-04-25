@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { CityCard } from '../components/CityCard';
 import { useCity } from '../services/useCity';
 import { useUser } from '../context/UserContext';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export const Home = ({ navigation }) => {
   const { cities } = useCity();
@@ -20,9 +19,9 @@ export const Home = ({ navigation }) => {
 
   const handleSearch = (searchValue) => {
     if (searchValue === '') return;
-    setSearch(cities.filter((item) => item.city.includes(searchValue)));
   };
 
+  console.log('cities', cities);
   return (
     <View style={styles.app}>
       <View style={styles.header}>
@@ -92,6 +91,7 @@ const styles = StyleSheet.create({
   headerContent: {
     paddingVertical: 30,
     marginVertical: 20,
+    flexWrap: 'wrap',
   },
   app: {
     backgroundColor: 'white',
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 15,
+    marginHorizontal: 15,
     color: 'white',
     flexWrap: 'wrap',
   },
