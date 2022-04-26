@@ -26,4 +26,23 @@ export const parser = (dataToParse) => {
     });
 };
 
+export const imageParser = (dataToParse) => {
+  return dataToParse.results.map((item) => {
+    return {
+      id: item.user.id,
+      photographer: item.user.first_name,
+      image: item.urls.regular,
+    };
+  });
+};
+
+export const cityParser = (dataToParse) => {
+  return dataToParse.map((item) => {
+    return {
+      id: item.city_id,
+      country: item.country,
+      city: item.city_name,
+    };
+  });
+};
 export const SERVERURL = `http://${HOST}:3002`;

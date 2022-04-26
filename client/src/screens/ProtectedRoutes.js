@@ -5,9 +5,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { CityDetail } from './CityDetail';
 import { Home } from './Home';
+import { AntDesign } from '@expo/vector-icons';
 
 const ProtectedRoutesStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const ProfileStackScreen = createNativeStackNavigator();
 
 export const ProtectedRoutes = () => {
   return (
@@ -28,6 +30,14 @@ export const ProtectedRoutes = () => {
   );
 };
 
+const ProfileStack = () => {
+  return (
+    <ProfileStackScreen.Navigator>
+      <ProfileStackScreen.Screen name="ProfilePage" component={Profile} />
+      <ProfileStackScreen.Screen name="MessagesPage" component={Messages} />
+    </ProfileStackScreen.Navigator>
+  );
+};
 export const HomeStackScreen = () => {
   return (
     <NavigationContainer>
@@ -35,24 +45,22 @@ export const HomeStackScreen = () => {
         <Tab.Screen
           name="Explore"
           component={ProtectedRoutes}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="home" size={24} color={color} />
+            ),
+          }}
         />
         <Tab.Screen
           name="Profile"
-          component={Profile}
-          options={{ headerShown: false }}
-          // screenOptions={({ route }) => {
-          //   let iconName;
-          //   if (route.name === 'Home') {
-          //     iconName = focused
-          //       ? 'ios-information-circle'
-          //       : 'ios-information-circle-outline';
-          //   } else if (route.name === 'Settings') {
-          //     iconName = focused ? 'ios-list-box' : 'ios-list';
-          //   }
-
-          //   return <Ionicons name={iconName} />;
-          // }}
+          component={ProfileStack}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name="user" size={24} color={color} />
+            ),
+          }}
         />
       </Tab.Navigator>
     </NavigationContainer>

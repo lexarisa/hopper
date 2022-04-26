@@ -5,19 +5,21 @@ import { NUMBEO_API_KEY } from '@env';
 import { UNSPLASH_ACCESS_KEY } from '@env';
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
-import { VictoryBar, VictoryChart, VictoryTheme } from 'victory-native';
 import { parser, parser2 } from '../utils/index.utils';
 import { CustomCard } from '../components/CustomCard';
 import { FlatList } from 'react-native-gesture-handler';
-// import ProgressBar from 'react-native-progress/Bar';
 import * as Progress from 'react-native-progress';
+import { imageParser } from '../utils/index.utils';
+
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
   const { user } = useUser();
   const { item } = route.params;
+  const [image, setImage] = useState([]);
 
-  const { data } = useFetch(
+  const { fetchImages } = useFetch(
     `https://api.unsplash.com/search/photos?query=${item.city}&client_id=${UNSPLASH_ACCESS_KEY}`
   );
 
@@ -25,6 +27,18 @@ export const CityDetail = ({ navigation, route }) => {
     fetchCityDetail();
   }, []);
 
+  useEffect(() => {
+    fetchImages().then(
+      (data) => {
+        setImage(imageParser(data));
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
+  }, []);
+
+  console.log(image);
   const fetchCityDetail = async () => {
     try {
       await Promise.all([
@@ -61,13 +75,12 @@ export const CityDetail = ({ navigation, route }) => {
     }
   };
 
-  console.log(cityDetail);
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.cityImg}>
-        {data.length > 0 && (
+        {image.length > 0 && (
           <View>
-            <Image source={{ uri: data[1].image }} style={styles.image} />
+            <Image source={{ uri: image[1].image }} style={styles.image} />
           </View>
         )}
 
@@ -92,36 +105,38 @@ export const CityDetail = ({ navigation, route }) => {
         </View>
         <View style={styles.scrollable}>
           {cityDetail.length > 1 && (
-            <ScrollView>
-              <FlatList
-                horizontal={true}
-                data={cityDetail[0]}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <View key={item.id} style={styles.container}>
-                    <CustomCard
-                      colorHex="#FFF"
-                      fontColor="#1C2126"
-                      descriptionColor="#727981"
-                      width={140}
-                      description={item.item}
-                      price={Math.round(item.itemPrice)}
-                    />
-                  </View>
-                )}
-              />
-            </ScrollView>
+            <FlatList
+              horizontal={true}
+              data={cityDetail[0]}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View key={item.id} style={styles.container}>
+                  <CustomCard
+                    colorHex="#FFF"
+                    fontColor="#1C2126"
+                    descriptionColor="#727981"
+                    width={140}
+                    description={item.item}
+                    price={Math.round(item.itemPrice)}
+                  />
+                </View>
+              )}
+            />
           )}
         </View>
         <Text style={styles.header}>Quality of Life Index</Text>
         {cityDetail.length > 1 &&
           cityDetail[1].map((item) => {
             return (
-              <View key={item.id} style={styles.container}>
+              <View key={item.id} style={styles.barCharts}>
                 {/* <ProgressBar progress={0.7} width={200} animated={true} /> */}
                 <View style={styles.bar}>
                   <Text style={styles.index}>Crime</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
+                    height={20}
+                    color="#4A56E2"
+                    borderRadius={8}
                     progress={Math.round((item.crimeIndex / 120) * 100) / 100}
                     width={330}
                   />
@@ -129,6 +144,10 @@ export const CityDetail = ({ navigation, route }) => {
                 <View style={styles.bar}>
                   <Text style={styles.index}>Quality of Life</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
+                    height={20}
+                    color="#4A56E2"
+                    borderRadius={8}
                     progress={Math.round(item.qualityOfLife) / 240}
                     width={330}
                   />
@@ -136,6 +155,10 @@ export const CityDetail = ({ navigation, route }) => {
                 <View style={styles.bar}>
                   <Text style={styles.index}>Rent</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
+                    height={20}
+                    color="#4A56E2"
+                    borderRadius={8}
                     progress={Math.round((item.rentIndex / 100) * 100) / 100}
                     width={330}
                   />
@@ -143,6 +166,10 @@ export const CityDetail = ({ navigation, route }) => {
                 <View style={styles.bar}>
                   <Text style={styles.index}>Safety</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
+                    height={20}
+                    color="#4A56E2"
+                    borderRadius={8}
                     progress={Math.round(item.safetyIndex) / 100}
                     width={330}
                   />
@@ -150,15 +177,23 @@ export const CityDetail = ({ navigation, route }) => {
                 <View style={styles.bar}>
                   <Text style={styles.index}>Restaurant Price</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
                     progress={
                       Math.round((item.restaurantPriceIndex / 170) * 100) / 100
                     }
+                    color="#4A56E2"
+                    borderRadius={8}
+                    height={20}
                     width={330}
                   />
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Traffic</Text>
                   <Progress.Bar
+                    unfilledColor="#eceefc"
+                    color="#4A56E2"
+                    height={20}
+                    borderRadius={8}
                     progress={Math.round((item.trafficIndex / 350) * 100) / 100}
                     width={330}
                   />
@@ -195,14 +230,17 @@ export const CityDetail = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    marginVertical: 20,
+    marginBottom: 20,
   },
   image: {
     height: 200,
   },
   container: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     flexDirection: 'column',
+  },
+  barCharts: {
+    alignItems: 'center',
   },
   cityImg: {},
   cityName: {},
@@ -224,6 +262,7 @@ const styles = StyleSheet.create({
   salaryCard: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 15,
   },
   index: {
     fontSize: 17,

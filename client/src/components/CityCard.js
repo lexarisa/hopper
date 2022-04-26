@@ -1,9 +1,12 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { useFetch } from '../services/useFetch';
 import { UNSPLASH_ACCESS_KEY } from '@env';
+import { useState, useEffect } from 'react';
+import { imageParser } from '../utils/index.utils';
 
 export const CityCard = ({ city, country }) => {
-  const { data } = useFetch(
+  const [data, setData] = useState([]);
+  const { fetchImages } = useFetch(
     `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
   );
 
@@ -14,18 +17,28 @@ export const CityCard = ({ city, country }) => {
   //       : 'white',
   // };
 
-  if (data.length === 0) {
+  useEffect(() => {
+    fetchImages().then(
+      (data) => {
+        setData(imageParser(data));
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
+  }, []);
+
+  if (data === undefined) {
     return <Text>Loading...</Text>;
   }
   return (
-    // <View style={styles.card}>
-    //   <View style={styles.cardContent}>
     <View style={styles.container}>
       {data.length > 0 && (
         <ImageBackground
           source={{ uri: data[1].image }}
           style={styles.image}
           resizeMode="cover"
+          imageStyle={{ borderRadius: 5 }}
         >
           <View style={styles.cardContent}>
             <Text style={[styles.cityName]}>{city}</Text>
@@ -42,9 +55,10 @@ const styles = StyleSheet.create({
   image: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50,
     padding: 20,
-    margin: 10,
+    margin: 5,
+    height: 145,
+    width: 175,
     shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 1,
@@ -57,20 +71,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingTop: 10,
     color: 'white',
+    textAlign: 'center',
   },
   countryName: {
     fontWeight: 'bold',
     paddingBottom: 10,
     color: 'white',
+    textAlign: 'center',
   },
   container: {
-    borderRadius: 10,
-    minWidth: 180,
-    minHeight: 100,
+    borderRadius: 50,
   },
   cardContent: {
-    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 10,
   },
 });

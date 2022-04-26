@@ -7,19 +7,51 @@ import {
   Pressable,
   ImageBackground,
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CityCard } from '../components/CityCard';
 import { useCity } from '../services/useCity';
 import { useUser } from '../context/UserContext';
+import { cityParser } from '../utils/index.utils';
 
 export const Home = ({ navigation }) => {
-  const { cities } = useCity();
+  const { fetchData } = useCity();
+  const [cities, setCities] = useState([]);
   const [search, setSearch] = useState('');
   const { user, isLoggedIn } = useUser();
+  const [currentCities, setCurrentCities] = useState({ x: 0, y: 50 });
+  const [citiesOnDisplay, setCitiesOnDisplay] = useState([]);
 
-  const handleSearch = (searchValue) => {
-    if (searchValue === '') return;
+  const handleSearch = () => {
+    const temporary = cities.slice(0, 10000);
+    return temporary.filter((item) => item.city.includes(search));
   };
+
+  // const scrollCitiesOnEndReached = () => {
+  //   setCitiesOnDisplay(
+  //     cities.slice(currentCities.x + 50, currentCities.y + 50)
+  //   );
+  //   setCurrentCities((prev) => ({ x: prev.x + 50, y: prev.y + 50 }));
+  // };
+
+  useEffect(() => {
+    setCitiesOnDisplay(cities.slice(0, 10000));
+  }, [cities]);
+
+  useEffect(() => {
+    fetchData().then(
+      (data) => {
+        setCities(cityParser(data));
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    if (search === '') setCitiesOnDisplay(cities.slice(0, 10000));
+    else setCitiesOnDisplay(handleSearch());
+  }, [search]);
 
   return (
     <View style={styles.app}>
@@ -50,15 +82,21 @@ export const Home = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Search for a city"
-          // onChangeText={() => handleSearch()}
-          // value={search}
+          onChangeText={setSearch}
+          value={search}
         />
       </View>
 
-      <View style={styles.container}>
-        {cities ? (
+      {cities ? (
+        <View style={styles.container}>
           <FlatList
-            data={cities.slice(0, 50)}
+            // onEndReachedThreshold={0.7}
+            // onEndReached={({ distanceFromEnd }) => {
+            //   if (distanceFromEnd < 0) return;
+            //   console.log('hello');
+            //   // scrollCitiesOnEndReached();
+            // }}
+            data={citiesOnDisplay}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <Pressable
@@ -67,14 +105,13 @@ export const Home = ({ navigation }) => {
                 <CityCard city={item.city} country={item.country} />
               </Pressable>
             )}
-            initialNumToRender={50}
             horizontal={false}
             numColumns={2}
           />
-        ) : (
-          <Text>No Cities to show</Text>
-        )}
-      </View>
+        </View>
+      ) : (
+        <Text>No Cities to show</Text>
+      )}
     </View>
   );
 };
@@ -90,23 +127,23 @@ const styles = StyleSheet.create({
   headerContent: {
     paddingVertical: 30,
     marginVertical: 20,
-    flexWrap: 'wrap',
   },
   app: {
     backgroundColor: 'white',
+    flex: 1,
   },
-
   column: {
     marginHorizontal: 10,
   },
   container: {
     justifyContent: 'space-around',
     alignItems: 'center',
+    borderRadius: 20,
+    maxHeight: '60%',
   },
   header: {
-    height: '25%',
-    alignItems: 'center',
-    borderBottomLeftRadius: 10,
+    height: '30%',
+    alignItems: 'flex-end',
   },
   join: {
     backgroundColor: '#3B71F3',
@@ -126,7 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   tagline: {
-    margin: 10,
+    margin: 0,
   },
   joinText: {
     color: 'white',
@@ -138,13 +175,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     marginTop: 15,
-    marginHorizontal: 15,
     color: 'white',
-    flexWrap: 'wrap',
   },
   headerBg: {
     height: '100%',
     width: '100%',
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
     backgroundColor: '#72A0C1',
     shadowColor: '#000000',
     shadowOpacity: 0.3,

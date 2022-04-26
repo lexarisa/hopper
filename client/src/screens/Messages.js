@@ -6,6 +6,7 @@ import { useUser } from '../context/UserContext';
 import { SERVERURL } from '../utils/index.utils';
 import { HOST } from '@env';
 import dayjs from 'dayjs';
+import { Feather } from '@expo/vector-icons';
 
 let advancedFormat = require('dayjs/plugin/advancedFormat');
 dayjs.extend(advancedFormat);
@@ -97,8 +98,6 @@ export const Messages = ({ route }) => {
     }
   }, [singleMessage]);
 
-  console.log('>>>>>', chatMessages);
-
   // const fetchMessagesDetail = async () => {
   //   console.log('fetchMessagesDetail()');
   //   try {
@@ -186,7 +185,7 @@ export const Messages = ({ route }) => {
           onSubmitEditing={() => handleSubmitMessage()}
           onChangeText={(msg) => setSingleMessage(msg)}
           placeholder="Write a message"
-        />
+        ></TextInput>
       </View>
     </View>
   );

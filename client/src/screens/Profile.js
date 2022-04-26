@@ -61,7 +61,7 @@ export const Profile = ({ navigation }) => {
 
   //how to navigate back to chatroom
 
-  // console.log(listOfCommunities);
+  console.log('>>>>', listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>
@@ -73,17 +73,13 @@ export const Profile = ({ navigation }) => {
         </View>
         <Text style={styles.header}>Your Communities</Text>
         <View style={styles.container}>
-          {listOfCommunities.map((community) => {
+          {listOfCommunities.map((item) => {
             return (
               <Pressable
-                key={community.id}
-                onPress={() => navigation.navigate('Messages')}
+                key={item.id}
+                onPress={() => navigation.navigate('MessagesPage', { item })}
               >
-                <ChatLog
-                  country={community.country}
-                  city={community.city}
-                  id={community.id}
-                />
+                <ChatLog country={item.country} city={item.city} id={item.id} />
               </Pressable>
             );
           })}
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   userImg: {
-    backgroundColor: 'pink',
+    backgroundColor: '#24CCA7',
     height: 50,
     width: 50,
     borderRadius: 25,
