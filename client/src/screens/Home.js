@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   header: {
     height: '25%',
     alignItems: 'center',
+    borderBottomLeftRadius: 10,
   },
   join: {
     backgroundColor: '#3B71F3',

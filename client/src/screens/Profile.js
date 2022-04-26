@@ -20,24 +20,40 @@ export const Profile = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    fetchCommunitiesJoined();
+    fetchCommunitiesJoined().then((data) => setCommunitiesJoined(data));
   }, [isFocused]);
 
-  const fetchCommunitiesJoined = async () => {
+  // const fetchCommunitiesJoined = async () => {
+  //   console.log('fetchCommunitiesJoined()');
+  //   try {
+  //     const res = await fetch(`${SERVERURL}/communities/${user.id}`);
+  //     const communityMember = res.json();
+  //     console.log('>>>', communityMember);
+  //     setCommunitiesJoined(communityMember);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const fetchCommunitiesJoined = () => {
     console.log('fetchCommunitiesJoined()');
-    try {
-      const res = await fetch(`${SERVERURL}/communities/${user.id}`);
-      const communityMember = await res.json();
-      console.log('>>>', communityMember);
-      setCommunitiesJoined(communityMember);
-    } catch (error) {
-      console.log(error);
-    }
+
+    return fetch(`${SERVERURL}/communities/${user.id}`)
+      .then((res) => (res.status < 400 ? res : Promise.reject(res)))
+      .then((data) => data.json())
+      .catch((er) => console.log(er));
+
+    // const communityMember = res.json();
+    // console.log('>>>', communityMember);
+    // setCommunitiesJoined(communityMember);
   };
+
+  // console.log('comJoined', communitiesJoined);
 
   const communitiesIdUsersIn = communitiesJoined.map(
     (community) => community.communityId
   );
+  // console.log('comIn', communitiesIdUsersIn);
 
   const listOfCommunities = cities.filter((city) => {
     return communitiesIdUsersIn.includes(city.id);
@@ -45,7 +61,7 @@ export const Profile = ({ navigation }) => {
 
   //how to navigate back to chatroom
 
-  console.log(listOfCommunities);
+  // console.log(listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>

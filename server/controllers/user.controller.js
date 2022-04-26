@@ -2,7 +2,7 @@ const { User } = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-async function index(req, res) {
+async function findAllUsers(req, res) {
   try {
     const users = await User.find();
     res.status(201);
@@ -14,7 +14,20 @@ async function index(req, res) {
   }
 }
 
-async function create(req, res) {
+async function findUserDetail(req, res) {
+  const { userId } = req.params;
+  console.log(userId);
+  try {
+    const user = await User.findById(userId);
+    res.status(200).send(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.send(error);
+  }
+}
+
+async function createNewUser(req, res) {
   try {
     //if username exists, email
     const { username, email, password } = req.body;
@@ -50,4 +63,4 @@ async function login(req, res) {
     res.status(401).send(error);
   }
 }
-module.exports = { index, create, login };
+module.exports = { findAllUsers, createNewUser, login, findUserDetail };

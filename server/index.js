@@ -20,14 +20,13 @@ app.use(communityRouter);
 io.on('connection', (socket) => {
   console.log('connected');
   socket.on('sendMessage', (msg, room) => {
-    console.log(msg);
     // if (room === '') {
     //   socket.broadcast.emit('receive-message', msg);
 
     //   //persist message
     // }
-    //p.to(room) why did i do this?
-    socket.emit('receive-message', msg); //sends everyone except for yourself
+    //socket.to(room) why did i do this?
+    socket.to(room).emit('receive-message', msg); //sends everyone except for yourself
     // io.emit('receive-message', msg);
   });
   socket.on('joinRoom', (roomId, callback) => {

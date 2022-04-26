@@ -1,12 +1,18 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { useFetch } from '../services/useFetch';
 import { UNSPLASH_ACCESS_KEY } from '@env';
-import { useEffect, useState } from 'react';
 
 export const CityCard = ({ city, country }) => {
   const { data } = useFetch(
     `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
   );
+
+  // const textColor = {
+  //   color:
+  //     parseInt(colorHex.replace('#', ''), 16) > 0xffffff / 1.1
+  //       ? 'black'
+  //       : 'white',
+  // };
 
   if (data.length === 0) {
     return <Text>Loading...</Text>;
@@ -22,8 +28,8 @@ export const CityCard = ({ city, country }) => {
           resizeMode="cover"
         >
           <View style={styles.cardContent}>
-            <Text style={styles.cityName}>{city}</Text>
-            <Text style={styles.countryName}>{country}</Text>
+            <Text style={[styles.cityName]}>{city}</Text>
+            <Text style={[styles.countryName]}>{country}</Text>
           </View>
         </ImageBackground>
       )}
@@ -48,14 +54,14 @@ const styles = StyleSheet.create({
     },
   },
   cityName: {
-    color: 'white',
     fontWeight: 'bold',
     paddingTop: 10,
+    color: 'white',
   },
   countryName: {
-    color: 'white',
     fontWeight: 'bold',
     paddingBottom: 10,
+    color: 'white',
   },
   container: {
     borderRadius: 10,

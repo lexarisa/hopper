@@ -1,11 +1,11 @@
-import { View, Text, Button, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import React from 'react';
 
 export const CustomButton = ({ text, onPress }) => {
   return (
-    <Pressable onPress={onPress} style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Text style={styles.text}>{text}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -16,10 +16,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
 
     alignItems: 'center',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: 'grey',
-    backgroundColor: '#3B71F3',
+    borderRadius: 16,
+
+    backgroundColor: '#24CCA7',
   },
   text: {
     fontWeight: 'bold',

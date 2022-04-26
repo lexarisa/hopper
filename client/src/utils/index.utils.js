@@ -1,3 +1,5 @@
+import { HOST } from '@env';
+
 export const parser2 = (dataToParse) => {
   return {
     id: dataToParse[1].city_id,
@@ -24,4 +26,4 @@ export const parser = (dataToParse) => {
     });
 };
 
-export const SERVERURL = `http://localhost:3002`;
+export const SERVERURL = `http://${HOST}:3002`;

@@ -6,8 +6,6 @@ import { PublicRoutes } from './src/screens/PublicRoutes';
 const DashBoard = () => {
   const { isLoggedIn } = useUser();
 
-  console.log(isLoggedIn);
-
   return <>{isLoggedIn ? <HomeStackScreen /> : <PublicRoutes />}</>;
 };
 

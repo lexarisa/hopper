@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { HOST } from '@env';
 
 const UserContext = createContext();
 
@@ -13,7 +14,7 @@ export function UserProvider({ children }) {
 
   async function login(loginInfo) {
     try {
-      const res = await fetch('http://localhost:3002/users/login', {
+      const res = await fetch(`http://${HOST}:3002/users/login`, {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'Content-Type': 'application/json' },
@@ -29,7 +30,7 @@ export function UserProvider({ children }) {
 
   async function createUser(user) {
     try {
-      const res = await fetch('http://localhost:3002/users', {
+      const res = await fetch(`http://${HOST}:3002/users`, {
         method: 'POST',
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
