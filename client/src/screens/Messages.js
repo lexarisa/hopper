@@ -32,7 +32,7 @@ export const Messages = ({ route }) => {
     return () => {
       socket.disconnect();
     };
-  }, [chatMessages]);
+  }, [);
 
   const addUserToCommunity = async (user) => {
     try {
