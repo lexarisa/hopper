@@ -16,18 +16,18 @@ import { useUser } from '../context/UserContext';
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+
   const { login } = useUser();
 
   const handleLogin = async () => {
     // if (username === '' && password.length < 6) {
     //   setError('Please provide valid credentials');
     // }
-    console.log('handleLogin()r');
+
     await login({ username, password });
   };
   return (
-    <SafeAreaView>
+    <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
@@ -35,6 +35,10 @@ export const Login = ({ navigation }) => {
             style={styles.logo}
             resizeMode="stretch"
           />
+          <Text style={styles.appName}>Hopper</Text>
+          <Text style={styles.appTagline}>
+            Discover your new remote working location
+          </Text>
         </View>
       </View>
       <View style={styles.footer}>
@@ -61,18 +65,32 @@ export const Login = ({ navigation }) => {
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-  },
   root: {
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#F9FBFC',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 30,
+  },
+  container: {
+    backgroundColor: '#24CCA7',
+    borderBottomEndRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomStartRadius: 30,
+    height: '50%',
+    borderRadius: 15,
+    shadowColor: '#000000',
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 0.5,
+      width: 1,
+    },
   },
   text: {
     color: 'grey',
@@ -80,10 +98,10 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    fontWeight: 'bold',
   },
   pressable: {
     marginLeft: 7,
@@ -91,6 +109,16 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
+  },
+  appName: {
+    marginTop: 20,
+    fontWeight: 'bold',
+    fontSize: 35,
+    color: '#1C2126',
+  },
+  appTagline: {
+    color: '#444',
+    marginTop: 10,
   },
 });
 

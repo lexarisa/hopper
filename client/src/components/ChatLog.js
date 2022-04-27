@@ -3,15 +3,28 @@ import React, { useEffect, useState } from 'react';
 import { useFetch } from '../services/useFetch';
 import { SERVERURL } from '../utils/index.utils';
 import { UNSPLASH_ACCESS_KEY } from '@env';
+import { imageParser } from '../utils/index.utils';
 
 export const ChatLog = ({ country, city, id }) => {
   const [chatPreview, setChatPreview] = useState('');
-  const { data } = useFetch(
+  const [images, setImages] = useState([]);
+  const { fetchImages } = useFetch(
     `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
   );
 
   useEffect(() => {
     fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    fetchImages().then(
+      (data) => {
+        setImages(imageParser(data));
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
   }, []);
 
   const fetchMessages = async () => {
@@ -32,11 +45,11 @@ export const ChatLog = ({ country, city, id }) => {
   return (
     <View style={styles.content}>
       <View>
-        {data.length > 1 && (
+        {images.length > 1 && (
           <Image
             resizeMode="cover"
             style={styles.image}
-            source={{ uri: data[2].image }}
+            source={{ uri: images[2].image }}
           />
         )}
       </View>

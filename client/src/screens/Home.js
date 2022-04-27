@@ -90,12 +90,6 @@ export const Home = ({ navigation }) => {
       {cities ? (
         <View style={styles.container}>
           <FlatList
-            // onEndReachedThreshold={0.7}
-            // onEndReached={({ distanceFromEnd }) => {
-            //   if (distanceFromEnd < 0) return;
-            //   console.log('hello');
-            //   // scrollCitiesOnEndReached();
-            // }}
             data={citiesOnDisplay}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (

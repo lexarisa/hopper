@@ -18,7 +18,6 @@ app.use(communityRouter);
 
 //move io routes to another file
 io.on('connection', (socket) => {
-  console.log('connected');
   socket.on('sendMessage', (msg, room) => {
     // if (room === '') {
     //   socket.broadcast.emit('receive-message', msg);

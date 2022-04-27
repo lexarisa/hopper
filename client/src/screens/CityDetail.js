@@ -234,6 +234,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 200,
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
   },
   container: {
     marginHorizontal: 10,

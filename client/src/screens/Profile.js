@@ -12,16 +12,30 @@ import { SERVERURL } from '../utils/index.utils';
 import { useCity } from '../services/useCity';
 import { ChatLog } from '../components/ChatLog';
 import { useIsFocused } from '@react-navigation/native';
+import { cityParser } from '../utils/index.utils';
 
 export const Profile = ({ navigation }) => {
   const { user, logout } = useUser();
   const [communitiesJoined, setCommunitiesJoined] = useState([]);
-  const { cities } = useCity();
+  // const { cities } = useCity();
+  const { fetchData } = useCity();
   const isFocused = useIsFocused();
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     fetchCommunitiesJoined().then((data) => setCommunitiesJoined(data));
   }, [isFocused]);
+
+  useEffect(() => {
+    fetchData().then(
+      (data) => {
+        setCities(cityParser(data));
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
+  }, []);
 
   // const fetchCommunitiesJoined = async () => {
   //   console.log('fetchCommunitiesJoined()');
