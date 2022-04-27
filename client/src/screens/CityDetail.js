@@ -11,8 +11,6 @@ import { FlatList } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import { imageParser } from '../utils/index.utils';
 
-import getSymbolFromCurrency from 'currency-symbol-map';
-
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
   const { user } = useUser();
@@ -38,7 +36,6 @@ export const CityDetail = ({ navigation, route }) => {
     );
   }, []);
 
-  console.log(image);
   const fetchCityDetail = async () => {
     try {
       await Promise.all([
@@ -234,8 +231,6 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 200,
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20,
   },
   container: {
     marginHorizontal: 10,

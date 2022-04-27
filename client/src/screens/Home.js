@@ -140,15 +140,16 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   join: {
-    backgroundColor: '#3B71F3',
+    borderWidth: 2,
     borderRadius: 10,
-    shadowColor: '#000000',
-    shadowOpacity: 0.3,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 1,
-      width: 1,
-    },
+    borderColor: 'white',
+    // shadowColor: '#000000',
+    // shadowOpacity: 0.3,
+    // shadowRadius: 1,
+    // shadowOffset: {
+    //   height: 1,
+    //   width: 1,
+    // },
   },
   headerGreeting: {
     alignSelf: 'flex-end',
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
-    backgroundColor: '#72A0C1',
+    backgroundColor: '#4A56E2',
     shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 1,
