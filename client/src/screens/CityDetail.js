@@ -11,6 +11,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import { imageParser } from '../utils/index.utils';
 
+
+
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
   const { user } = useUser();

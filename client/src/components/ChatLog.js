@@ -5,6 +5,7 @@ import { SERVERURL } from '../utils/index.utils';
 import { UNSPLASH_ACCESS_KEY } from '@env';
 import { imageParser } from '../utils/index.utils';
 
+
 export const ChatLog = ({ country, city, id }) => {
   const [chatPreview, setChatPreview] = useState('');
   const [images, setImages] = useState([]);

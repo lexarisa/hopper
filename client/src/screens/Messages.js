@@ -7,6 +7,7 @@ import { SERVERURL } from '../utils/index.utils';
 import { HOST } from '@env';
 import dayjs from 'dayjs';
 import { Feather } from '@expo/vector-icons';
+console.log(HOST)
 
 let advancedFormat = require('dayjs/plugin/advancedFormat');
 dayjs.extend(advancedFormat);
@@ -32,7 +33,7 @@ export const Messages = ({ route }) => {
     return () => {
       socket.disconnect();
     };
-  }, [);
+  }, []);
 
   const addUserToCommunity = async (user) => {
     try {
@@ -47,7 +48,6 @@ export const Messages = ({ route }) => {
     }
   };
   const fetchMessages = async () => {
-    console.log('fetchMessages()');
     try {
       fetch(`${SERVERURL}/messages/${item.id}`)
         .then((res) => {
