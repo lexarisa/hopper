@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(messageRouter);
 app.use(userRouter);
 app.use(communityRouter);
+require('dotenv').config()
 
 //move io routes to another file
 io.on('connection', (socket) => {
