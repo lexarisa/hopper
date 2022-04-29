@@ -1,5 +1,6 @@
 import { HOST } from '@env';
 
+
 export const parser2 = (dataToParse) => {
   return {
     id: dataToParse[1].city_id,
@@ -36,7 +37,8 @@ export const imageParser = (dataToParse) => {
   });
 };
 
-export const cityParser = (dataToParse) => {
+export const cityParser = (dataToParse) => { 
+  console.log(dataToParse)
   return dataToParse.map((item) => {
     return {
       id: item.city_id,

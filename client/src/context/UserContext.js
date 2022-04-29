@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HOST } from '@env';
 
+
 const UserContext = createContext();
 
 export function useUser() {
