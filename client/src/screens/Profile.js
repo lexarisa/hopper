@@ -22,9 +22,19 @@ export const Profile = ({ navigation }) => {
   const isFocused = useIsFocused();
   const [cities, setCities] = useState([]);
 
-  useEffect(() => {
-    fetchCommunitiesJoined().then((data) => setCommunitiesJoined(data));
-  }, [isFocused]);
+  // TODO Share cities state. 
+  // perhaps this is a case of shared state rather than another fetch?
+  // This function is requesting ALL of the cities from the api again
+  // and then mapping over all of them to remove extra data. 
+  // and then, she's only rendering the few communities that a user has joined. 
+  // Another idea is that we can add community id's onto the user model?
+  // That way we can request only the communities we need from the numbeo api. 
+  useEffect(() => { 
+    fetchCommunitiesJoined().then((data) => { 
+      console.log('>>>>>',data)
+      setCommunitiesJoined(data)
+    });
+  }, [isFocused]); // why is this happening? And why re render?
 
   useEffect(() => {
     fetchData().then(
@@ -37,35 +47,16 @@ export const Profile = ({ navigation }) => {
     );
   }, []);
 
-  // const fetchCommunitiesJoined = async () => {
-  //   console.log('fetchCommunitiesJoined()');
-  //   try {
-  //     const res = await fetch(`${SERVERURL}/communities/${user.id}`);
-  //     const communityMember = res.json();
-  //     console.log('>>>', communityMember);
-  //     setCommunitiesJoined(communityMember);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const fetchCommunitiesJoined = () => {
     return fetch(`${SERVERURL}/communities/${user.id}`)
       .then((res) => (res.status < 400 ? res : Promise.reject(res)))
       .then((data) => data.json())
       .catch((er) => console.log(er));
-
-    // const communityMember = res.json();
-    // console.log('>>>', communityMember);
-    // setCommunitiesJoined(communityMember);
   };
-
-  // console.log('comJoined', communitiesJoined);
 
   const communitiesIdUsersIn = communitiesJoined.map(
     (community) => community.communityId
   );
-  // console.log('comIn', communitiesIdUsersIn);
 
   const listOfCommunities = cities.filter((city) => {
     return communitiesIdUsersIn.includes(city.id);
