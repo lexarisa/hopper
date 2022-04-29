@@ -13,22 +13,23 @@ async function getMessagesByCommunity(req, res) {
   }
 }
 
-async function postMessageToCommunity(req, res) {
-  try {
-    const { userId, communityId, content, username, createdAt } = req.body;
-    const message = await Chat.create({
-      userId,
-      communityId,
-      content,
-      username,
-      createdAt,
-    });
-    res.status(200);
-    res.send(message);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-}
+// async function postMessageToCommunity(req, res) {
+//   try {
+//     const { userId, communityId, content, username, createdAt } = req.body;
+//     const message = await Chat.create({
+//       userId,
+//       communityId,
+//       content,
+//       username,
+//       createdAt,
+//     });
+//     res.status(200);
+//     res.send(message);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send(error);
+//   }
+// }
 
-module.exports = { getMessagesByCommunity, postMessageToCommunity };
+// module.exports = { getMessagesByCommunity, postMessageToCommunity };
+module.exports = { getMessagesByCommunity};

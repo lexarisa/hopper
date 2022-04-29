@@ -1,51 +1,64 @@
-const express = require('express');
-const app = express();
+require('dotenv').config()
 const http = require('http');
-const server = http.createServer(app);
+const express = require('express');
+const cors = require('cors');
+const { Server } = require('socket.io');
+const mongoose = require('mongoose');
+
 const messageRouter = require('./routes/routes.messages');
 const userRouter = require('./routes/routes.users');
 const communityRouter = require('./routes/routes.communityMembers');
-const cors = require('cors');
-const { Server } = require('socket.io');
+const { emitWarning } = require('process');
+
+const { Chat, saveMessage } = require('./models/chat.model')
+
+const app = express();
+const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: '*'
   }
 });
-const mongoose = require('mongoose');
+
 
 app.use(cors());
 app.use(express.json());
 app.use(messageRouter);
 app.use(userRouter);
 app.use(communityRouter);
-require('dotenv').config()
 
 //move io routes to another file
-io.on('connection', (socket) => {
-  socket.on('sendMessage', (msg, room) => {
-    // if (room === '') {
-    //   socket.broadcast.emit('receive-message', msg);
 
-    //   //persist message
-    // }
-    //socket.to(room) why did i do this?
-    socket.to(room).emit('receive-message', msg); //sends everyone except for yourself
-    // io.emit('receive-message', msg);
-  });
-  socket.on('joinRoom', (roomId, callback) => {
-    socket.join(roomId);
-    callback(`Joined ${roomId}`);
-  });
-});
 const PORT = process.env.PORT || 3002;
+const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost/hopper'
 
 server.listen(PORT, async () => {
   try {
-    await mongoose.connect('mongodb://localhost/hopper');
+    io.on('connection', (socket) => {
+      socket.on('sendMessage', async (msg, room) => {
+        const newMessage = await saveMessage(msg)
+        if (newMessage) {
+          socket.to(room).emit('receive-message', msg); //sends everyone except for yourself
+        } else {
+          // send back to sender error
+        }
+        
+        // io.emit('receive-message', msg);
+      });
+      socket.on('joinRoom', async (roomId, callback) => {
+        socket.join(roomId);
+        const messages = await Chat.find({roomId})
+        // console.log('>> MESSAGES >>', messages)
+        // callback(`Joined ${roomId}`);
+        callback(`Here are your messages ${messages}`);
+      });
+    });
+
+
+    await mongoose.connect(DATABASE_URL);
     console.log('Successfully connected to the database');
     console.log(`Server running on ${PORT}`);
   } catch (error) {
-    console.log('Error trying to connect to the db', error);
+    console.log('Error starting up', error);
   }
 });

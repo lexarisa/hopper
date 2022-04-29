@@ -24,7 +24,9 @@ export const Messages = ({ route }) => {
   useEffect(() => {
     fetchMessages();
     socket.emit('joinRoom', item.id, (message) => {
-      setNotification(message);
+      // setNotification(message);
+      console.log(message)
+
     });
     socket.on('receive-message', (msg) => {
       setChatMessages((prevMsg) => [...prevMsg, msg]);
@@ -90,7 +92,7 @@ export const Messages = ({ route }) => {
       };
       socket.emit('sendMessage', messageModel, item.id);
       setChatMessages((prevMsg) => [...prevMsg, messageModel]); //not rerendering
-      postMessage(messageModel);
+      // postMessage(messageModel);
       addUserToCommunity({ userId: user.id, communityId: item.id });
       setSingleMessage('');
     } else {

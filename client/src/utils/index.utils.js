@@ -1,4 +1,4 @@
-import { HOST } from '@env';
+import { HOST, PORT } from '@env'; // RR vscode bug needs comment for these imports
 
 
 export const parser2 = (dataToParse) => {
@@ -37,7 +37,7 @@ export const imageParser = (dataToParse) => {
   });
 };
 
-export const cityParser = (dataToParse) => { 
+export const cityParser = (dataToParse) => {
   console.log(dataToParse)
   return dataToParse.map((item) => {
     return {
@@ -47,4 +47,4 @@ export const cityParser = (dataToParse) => {
     };
   });
 };
-export const SERVERURL = `http://${HOST}:3002`;
+export const SERVERURL = `http://${HOST}:${PORT}`;
