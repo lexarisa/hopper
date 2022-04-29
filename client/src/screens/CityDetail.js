@@ -113,7 +113,7 @@ export const CityDetail = ({ navigation, route }) => {
                     colorHex="#FFF"
                     fontColor="#1C2126"
                     descriptionColor="#727981"
-                    width={140}
+                    width={200}
                     description={item.item}
                     price={Math.round(item.itemPrice)}
                   />

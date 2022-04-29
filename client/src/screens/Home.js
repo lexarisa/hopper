@@ -35,6 +35,7 @@ export const Home = ({ navigation }) => {
 
   useEffect(() => {
     setCitiesOnDisplay(cities.slice(0, 10000));
+    return () => setCitiesOnDisplay({});
   }, [cities]);
 
   useEffect(() => {
