@@ -7,7 +7,7 @@ import { SERVERURL } from '../utils/index.utils';
 import { HOST } from '@env';
 import dayjs from 'dayjs';
 import { Feather } from '@expo/vector-icons';
-console.log(HOST)
+
 
 let advancedFormat = require('dayjs/plugin/advancedFormat');
 dayjs.extend(advancedFormat);
