@@ -50,8 +50,6 @@ export const Profile = ({ navigation }) => {
   // };
 
   const fetchCommunitiesJoined = () => {
-    console.log('fetchCommunitiesJoined()');
-
     return fetch(`${SERVERURL}/communities/${user.id}`)
       .then((res) => (res.status < 400 ? res : Promise.reject(res)))
       .then((data) => data.json())
@@ -74,8 +72,6 @@ export const Profile = ({ navigation }) => {
   });
 
   //how to navigate back to chatroom
-
-  console.log('>>>>', listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>

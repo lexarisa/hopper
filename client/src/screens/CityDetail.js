@@ -11,6 +11,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import { imageParser } from '../utils/index.utils';
 
+
+
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
   const { user } = useUser();
@@ -40,7 +42,7 @@ export const CityDetail = ({ navigation, route }) => {
     try {
       await Promise.all([
         fetch(
-          `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${item.city}&country=${item.country}`
+          `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${item.city}&country=${item.country}&currency=USD`
         ),
         fetch(
           `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${item.city}&country=${item.country}`

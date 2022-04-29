@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HOST } from '@env';
 
@@ -9,8 +9,21 @@ export function useUser() {
 }
 
 export function UserProvider({ children }) {
+
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(async ()=>{
+    try {
+      const key = 'HOPPER_USER';
+      const value = await AsyncStorage.getItem(key);
+      const user = value ? JSON.parse(value) :null;
+      setUser(user)
+      setIsLoggedIn(user ? true : false)
+    } catch (error) {
+      console.log(error);
+    }
+  }, [])
 
   async function login(loginInfo) {
     try {
@@ -22,6 +35,7 @@ export function UserProvider({ children }) {
       const loginUser = await res.json();
 
       setUser(loginUser);
+      storeData(loginUser)
       setIsLoggedIn(true);
     } catch (error) {
       console.log(error);
@@ -39,7 +53,6 @@ export function UserProvider({ children }) {
       const newUser = await res.json();
 
       setUser(newUser);
-
       storeData(newUser);
       setIsLoggedIn(true);
     } catch (error) {
@@ -51,11 +64,12 @@ export function UserProvider({ children }) {
   const logout = () => {
     setIsLoggedIn(false);
     setUser(null);
+    AsyncStorage.removeItem('HOPPER_USER')
   };
 
   const storeData = async (user) => {
     try {
-      const key = JSON.stringify(user.id);
+      const key = 'HOPPER_USER';
       const jsonValue = JSON.stringify(user);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
@@ -63,15 +77,7 @@ export function UserProvider({ children }) {
     }
   };
 
-  const getData = async (user) => {
-    try {
-      const key = JSON.stringify(user.id);
-      const value = await AsyncStorage.getItem(key);
-      return value !== null ? JSON.parse(value) : null;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   const value = { login, logout, createUser, setUser, user, isLoggedIn };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

@@ -7,7 +7,11 @@ const userRouter = require('./routes/routes.users');
 const communityRouter = require('./routes/routes.communityMembers');
 const cors = require('cors');
 const { Server } = require('socket.io');
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*'
+  }
+});
 const mongoose = require('mongoose');
 
 app.use(cors());

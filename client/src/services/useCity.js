@@ -1,9 +1,10 @@
 import { NUMBEO_API_KEY } from '@env';
+const NUMBEO = NUMBEO_API_KEY
 
 export const useCity = () => {
   const fetchData = () => {
     return fetch(
-      `https://www.numbeo.com/api/rankings_by_city_current?api_key=${NUMBEO_API_KEY}&section=1`
+      `https://www.numbeo.com/api/rankings_by_city_current?api_key=${NUMBEO}&section=1`
     ).then((res) => {
       if (res.ok) {
         return res.json();
