@@ -1,0 +1,24 @@
+{
+  "name": "hopper",
+  "version": "1.0.0",
+  "description": "This repo is used to do code reviews for entire projects from students.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "cd client && npm start",
+    "server": "cd server && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mathinoc/hopper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mathinoc/hopper/issues"
+  },
+  "homepage": "https://github.com/Mathinoc/hopper#readme",
+  "devDependencies": {
+    "eslint": "^8.14.0"
+  }
+}
