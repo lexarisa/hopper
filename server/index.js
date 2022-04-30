@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
-
+const messageRouter = require('./routes/routes.messages');
 const userRouter = require("./routes/routes.users");
 const communityRouter = require("./routes/routes.communityMembers");
 
@@ -20,6 +20,7 @@ const io = new Server(server, {
 
 app.use(cors());
 app.use(express.json());
+app.use(messageRouter);
 app.use(userRouter);
 app.use(communityRouter);
 

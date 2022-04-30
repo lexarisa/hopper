@@ -3,7 +3,6 @@ const router = express.Router();
 
 const controllers = require('../controllers/chat.controller');
 
-// router.get('/messages/:communityId', controllers.getMessagesByCommunity);
-// router.post('/messages', controllers.postMessageToCommunity);
+router.get('/messages/:communityId', controllers.getMessagesByCommunity);
 
 module.exports = router;
