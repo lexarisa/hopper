@@ -33,7 +33,7 @@ export const ProtectedRoutes = () => {
 const ProfileStack = () => {
   return (
     <ProfileStackScreen.Navigator>
-      {/* <ProfileStackScreen.Screen name="ProfilePage" component={Profile} /> */}
+      <ProfileStackScreen.Screen name="ProfilePage" component={Profile} />
       {/* <ProfileStackScreen.Screen name="MessagesPage" component={Messages} /> */}
     </ProfileStackScreen.Navigator>
   );

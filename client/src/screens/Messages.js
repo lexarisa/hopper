@@ -1,48 +1,62 @@
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import React, { useState, useCallback, useEffect } from 'react';
-import io from 'socket.io-client';
-import { FlatList } from 'react-native-gesture-handler';
-import { useUser } from '../context/UserContext';
-import { SERVERURL } from '../utils/index.utils';
-import { HOST } from '@env';
-import dayjs from 'dayjs';
-import { Feather } from '@expo/vector-icons';
+import { View, Text, TextInput, StyleSheet } from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import io from "socket.io-client";
+import { FlatList } from "react-native-gesture-handler";
+import { useUser } from "../context/UserContext";
+import { SERVERURL } from "../utils/index.utils";
+import { HOST } from "@env";
+import dayjs from "dayjs";
+import { Feather } from "@expo/vector-icons";
 
-
-let advancedFormat = require('dayjs/plugin/advancedFormat');
+let advancedFormat = require("dayjs/plugin/advancedFormat");
 dayjs.extend(advancedFormat);
 
 const socket = io(`http://${HOST}:3002`);
 
 export const Messages = ({ route }) => {
-  const [singleMessage, setSingleMessage] = useState('');
+  const [singleMessage, setSingleMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState("");
   const { user } = useUser();
   const { item } = route.params; //string
 
-  useEffect(() => {
-    fetchMessages();
-    socket.emit('joinRoom', item.id, (message) => {
-      // setNotification(message);
-      console.log(message)
 
+console.log('outside of useEffect()');
+
+  useEffect(() => {
+    console.log('in useEffect()')
+    console.log(item)
+    // console.log(item)
+    //fetchMessages();
+    socket.emit("joinRoom", item.id, (err, response) => {
+      console.log('in emit Joinroom');
+      if (err) {
+        console.log("Error getting data Messages()", err);
+      } else {
+        console.log("response", response);
+      }
+      // socket.on("load-messages-after-joining", (messages) => {});
     });
-    socket.on('receive-message', (msg) => {
+
+    socket.on("receive-message", (msg) => {
+      console.log('Messages on join', msg)
       setChatMessages((prevMsg) => [...prevMsg, msg]);
     });
     //cleanup
     return () => {
       socket.disconnect();
+      setChatMessages({});
     };
   }, []);
+
+
 
   const addUserToCommunity = async (user) => {
     try {
       const res = await fetch(`${SERVERURL}/communities`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(user),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
       return await res.json();
     } catch (error) {
@@ -53,7 +67,7 @@ export const Messages = ({ route }) => {
     try {
       fetch(`${SERVERURL}/messages/${item.id}`)
         .then((res) => {
-          if (!res.ok) throw new Error('Something went wrong');
+          if (!res.ok) throw new Error("Something went wrong");
           return res.json();
         })
         .then((data) => {
@@ -67,11 +81,11 @@ export const Messages = ({ route }) => {
   const postMessage = async (msg) => {
     try {
       fetch(`${SERVERURL}/messages`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(msg),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }).then((res) => {
-        if (!res.ok) throw Error('Something went wrong');
+        if (!res.ok) throw Error("Something went wrong");
         return res.json();
       });
     } catch (error) {
@@ -90,13 +104,13 @@ export const Messages = ({ route }) => {
         communityId: item.id,
         createdAt: new Date(),
       };
-      socket.emit('sendMessage', messageModel, item.id);
+      socket.emit("sendMessage", messageModel, item.id);
       setChatMessages((prevMsg) => [...prevMsg, messageModel]); //not rerendering
       // postMessage(messageModel);
       addUserToCommunity({ userId: user.id, communityId: item.id });
-      setSingleMessage('');
+      setSingleMessage("");
     } else {
-      console.log('text empty');
+      console.log("text empty");
     }
   }, [singleMessage]);
 
@@ -195,8 +209,8 @@ export const Messages = ({ route }) => {
 
 const styles = StyleSheet.create({
   chatLog: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 15,
     marginHorizontal: 5,
   },
@@ -205,7 +219,7 @@ const styles = StyleSheet.create({
   },
   container: {
     marginHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     flex: 1,
   },
   chat: {
@@ -216,10 +230,10 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 280,
     marginVertical: 8,
-    color: 'white',
-    backgroundColor: '#F9FBFC',
+    color: "white",
+    backgroundColor: "#F9FBFC",
     borderRadius: 20,
-    shadowColor: '#000000',
+    shadowColor: "#000000",
     shadowOpacity: 0.25,
     shadowRadius: 1,
     shadowOffset: {
@@ -228,7 +242,7 @@ const styles = StyleSheet.create({
     },
   },
   input: {
-    backgroundColor: '#E8E8E8',
+    backgroundColor: "#E8E8E8",
     padding: 15,
     marginVertical: 20,
     marginHorizontal: 15,
@@ -238,31 +252,31 @@ const styles = StyleSheet.create({
 
   text: {},
   image: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 10,
     height: 45,
     width: 45,
-    backgroundColor: '#4A56E2',
+    backgroundColor: "#4A56E2",
     borderRadius: 15,
     marginBottom: 10,
     marginRight: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
 
     elevation: 2,
   },
   userDetail: {
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   date: {
     fontSize: 9,
-    color: '#1C2126',
+    color: "#1C2126",
     marginLeft: 5,
     marginTop: 4,
   },
   username: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 5,
   },
   message: {
@@ -270,8 +284,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   userInitial: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 });
 

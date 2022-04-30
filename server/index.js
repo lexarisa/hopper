@@ -35,6 +35,7 @@ const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost/hopper'
 server.listen(PORT, async () => {
   try {
     io.on('connection', (socket) => {
+
       socket.on('sendMessage', async (msg, room) => {
         const newMessage = await saveMessage(msg)
         if (newMessage) {
@@ -42,16 +43,25 @@ server.listen(PORT, async () => {
         } else {
           // send back to sender error
         }
-        
         // io.emit('receive-message', msg);
       });
+
       socket.on('joinRoom', async (roomId, callback) => {
         socket.join(roomId);
-        const messages = await Chat.find({roomId})
-        // console.log('>> MESSAGES >>', messages)
-        // callback(`Joined ${roomId}`);
+        console.log('in joinRoom')
+        const messages = await Chat.find({roomId});
+        console.log('messages', messages)
+        if (messages) {
+          socket.to(roomId).emit('receive-message', messages);
+          return
+        } else {
+          // send back to sender error
+          callback(`No message yet`);
+          return
+        }
         callback(`Here are your messages ${messages}`);
       });
+
     });
 
 

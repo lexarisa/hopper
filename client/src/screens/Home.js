@@ -47,6 +47,7 @@ export const Home = ({ navigation }) => {
         console.log(e);
       }
     );
+    return () => setCities({})
   }, []);
 
   useEffect(() => {
