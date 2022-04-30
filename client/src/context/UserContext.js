@@ -33,11 +33,12 @@ export function UserProvider({ children }) {
         body: JSON.stringify(loginInfo),
         headers: { 'Content-Type': 'application/json' },
       });
-      const loginUser = await res.json();
-
-      setUser(loginUser);
-      storeData(loginUser)
-      setIsLoggedIn(true);
+      const user = await res.json();
+      if (user) {
+        setUser(user);
+        storeData(user)
+        setIsLoggedIn(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -50,17 +51,30 @@ export function UserProvider({ children }) {
         body: JSON.stringify(user),
         headers: { 'Content-Type': 'application/json' },
       });
-
-      const newUser = await res.json();
-
-      setUser(newUser);
-      storeData(newUser);
-      setIsLoggedIn(true);
+      if (res.ok){
+        const user = await res.json();
+        setUser(user);
+        storeData(user);
+        setIsLoggedIn(true);
+        return {
+          ok: true
+        }
+      } else {
+        const data = await res.json()
+        return {
+          ok: false,
+          error: data.error
+        }
+      }
     } catch (error) {
       // display error on ui
       console.log(error);
     }
   }
+
+  
+
+
 
   const logout = () => {
     setIsLoggedIn(false);
@@ -74,6 +88,7 @@ export function UserProvider({ children }) {
       const jsonValue = JSON.stringify(user);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
+
       console.log(error);
     }
   };

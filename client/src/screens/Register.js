@@ -18,7 +18,10 @@ export const Register = ({ navigation }) => {
   const { createUser } = useUser();
 
   const handleRegister = async () => {
-    await createUser({ username, email, password });
+    const res = await createUser({ username, email, password });
+    if (!res.ok){
+      console.log(res.error)
+    } 
   };
   return (
     <>
