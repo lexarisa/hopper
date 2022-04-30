@@ -1,15 +1,13 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import React, { useState, useCallback, useEffect } from "react";
 import io from "socket.io-client";
 import { FlatList } from "react-native-gesture-handler";
 import { useUser } from "../context/UserContext";
 import { SERVERURL } from "../utils/index.utils";
 import { HOST } from "@env";
-import dayjs from "dayjs";
-import { Feather } from "@expo/vector-icons";
+import Message from './../components/Message';
 
-let advancedFormat = require("dayjs/plugin/advancedFormat");
-dayjs.extend(advancedFormat);
+
 
 const socket = io(`http://${HOST}:3002`);
 
@@ -20,36 +18,31 @@ export const Messages = ({ route }) => {
   const { user } = useUser();
   const { item } = route.params; //string
 
-
-console.log('outside of useEffect()');
-
   useEffect(() => {
-    console.log('in useEffect()')
-    console.log(item)
-    // console.log(item)
-    //fetchMessages();
-    socket.emit("joinRoom", item.id, (err, response) => {
-      console.log('in emit Joinroom');
-      if (err) {
-        console.log("Error getting data Messages()", err);
+    socket.emit("joinRoom", item.id, (response) => {
+      if (response.ok) {
+        setChatMessages(response.data);
       } else {
-        console.log("response", response);
+        console.log("response", response.errors);
       }
-      // socket.on("load-messages-after-joining", (messages) => {});
     });
 
-    socket.on("receive-message", (msg) => {
-      console.log('Messages on join', msg)
-      setChatMessages((prevMsg) => [...prevMsg, msg]);
+    socket.on("receive-message", (response) => {
+      if (response.ok) {
+        setChatMessages((prevMsg) => {
+          return [...prevMsg, ...response.data];
+        });
+      } else {
+        // handle errors: response.errors
+      }
     });
+
     //cleanup
     return () => {
       socket.disconnect();
       setChatMessages({});
     };
   }, []);
-
-
 
   const addUserToCommunity = async (user) => {
     try {
@@ -105,8 +98,6 @@ console.log('outside of useEffect()');
         createdAt: new Date(),
       };
       socket.emit("sendMessage", messageModel, item.id);
-      setChatMessages((prevMsg) => [...prevMsg, messageModel]); //not rerendering
-      // postMessage(messageModel);
       addUserToCommunity({ userId: user.id, communityId: item.id });
       setSingleMessage("");
     } else {
@@ -114,86 +105,23 @@ console.log('outside of useEffect()');
     }
   }, [singleMessage]);
 
-  // const fetchMessagesDetail = async () => {
-  //   console.log('fetchMessagesDetail()');
-  //   try {
-  //     await Promise.all([
-  //       fetch(`${SERVERURL}/messages/${item.id}`),
-  //       fetch(`${SERVERURL}/users/${user.id}`),
-  //     ])
-  //       .then((responses) => {
-  //         return Promise.all(
-  //           responses.map((response) => {
-  //             return response.json();
-  //           })
-  //         );
-  //       })
-  //       .then((data) => {
-  //         setMessageDetail(data);
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // // console.log('messageDetail', messageDetail);
-  // const combineMessageWithUser = () => {
-  //   if (messageDetail.length > 0) {
-  //     const newArray = messageDetail[0].map((item) => {
-  //       if (item.userId === messageDetail[1]._id) {
-  //         return {
-  //           userId: item.userId,
-  //           username: messageDetail[1].username,
-  //           email: messageDetail[1].email,
-  //           content: item.content,
-  //           communityId: item.communityId,
-  //         };
-  //       } else {
-  //         return item;
-  //       }
-  //     });
-
-  //     return newArray;
-  //   }
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.chat}>
         {chatMessages && (
           <FlatList
-            data={chatMessages}
-            keyExtractor={(item) => item._id}
+            inverted
+            data={[...chatMessages].reverse()}
+            keyExtractor={(item, index) => item._id}
             renderItem={({ item }) => (
-              <View style={styles.chatLog}>
-                <View style={styles.left}>
-                  <View style={styles.image}>
-                    {item.username && (
-                      <Text style={styles.userInitial}>
-                        {item.username.charAt(0)}
-                      </Text>
-                    )}
-                  </View>
-                </View>
-                <View style={styles.right}>
-                  <View style={styles.messageBox}>
-                    <View style={styles.userDetail}>
-                      <Text style={styles.username}>{item.username}</Text>
-                      <Text style={styles.date}>
-                        {dayjs(item.createdAt).format(
-                          `HH:mm A: - MMM Do, YYYY`
-                        )}
-                      </Text>
-                    </View>
-                    <Text style={styles.message}>{item.content}</Text>
-                  </View>
-                </View>
-              </View>
+              <Message
+                item={item}
+                user={user}
+              />
             )}
           />
         )}
       </View>
-
       <View>
         <TextInput
           style={styles.input}
@@ -208,15 +136,7 @@ console.log('outside of useEffect()');
 };
 
 const styles = StyleSheet.create({
-  chatLog: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 15,
-    marginHorizontal: 5,
-  },
-  left: {
-    marginRight: 5,
-  },
+  
   container: {
     marginHorizontal: 10,
     backgroundColor: "white",
@@ -226,21 +146,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
   },
-  messageBox: {
-    padding: 15,
-    width: 280,
-    marginVertical: 8,
-    color: "white",
-    backgroundColor: "#F9FBFC",
-    borderRadius: 20,
-    shadowColor: "#000000",
-    shadowOpacity: 0.25,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 0.5,
-      width: 1,
-    },
-  },
   input: {
     backgroundColor: "#E8E8E8",
     padding: 15,
@@ -248,45 +153,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 15,
     height: 50,
-  },
-
-  text: {},
-  image: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    height: 45,
-    width: 45,
-    backgroundColor: "#4A56E2",
-    borderRadius: 15,
-    marginBottom: 10,
-    marginRight: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-
-    elevation: 2,
-  },
-  userDetail: {
-    flexDirection: "column",
-  },
-  date: {
-    fontSize: 9,
-    color: "#1C2126",
-    marginLeft: 5,
-    marginTop: 4,
-  },
-  username: {
-    fontWeight: "bold",
-    marginLeft: 5,
-  },
-  message: {
-    marginVertical: 10,
-    marginLeft: 5,
-  },
-  userInitial: {
-    color: "white",
-    fontWeight: "bold",
-  },
+  }, 
 });
-
-//emit to get all msgs
