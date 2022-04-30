@@ -33,11 +33,18 @@ export function UserProvider({ children }) {
         body: JSON.stringify(loginInfo),
         headers: { 'Content-Type': 'application/json' },
       });
-      const user = await res.json();
-      if (user) {
+      if (res.ok) {
+        const user = await res.json();
         setUser(user);
         storeData(user)
         setIsLoggedIn(true);
+        return { ok: true }
+      } else {
+        const data = await res.json()
+        return {
+          ok: false, 
+          errors: data.errors
+        }
       }
     } catch (error) {
       console.log(error);
@@ -63,11 +70,10 @@ export function UserProvider({ children }) {
         const data = await res.json()
         return {
           ok: false,
-          error: data.error
+          errors: data.errors
         }
       }
     } catch (error) {
-      // display error on ui
       console.log(error);
     }
   }

@@ -64,8 +64,8 @@ export const Home = ({ navigation }) => {
               </View>
             ) : (
               <View style={[styles.join, styles.headerGreeting]}>
-                <Pressable onPress={() => navigation.navigate('Register')}>
-                  <Text style={styles.joinText}>Join</Text>
+                <Pressable onPress={() => navigation.navigate('Login')}>
+                  <Text style={styles.joinText}>Login</Text>
                 </Pressable>
               </View>
             )}

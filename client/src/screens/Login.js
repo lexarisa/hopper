@@ -16,15 +16,15 @@ import { useUser } from '../context/UserContext';
 export const Login = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
 
   const { login } = useUser();
 
   const handleLogin = async () => {
-    // if (username === '' && password.length < 6) {
-    //   setError('Please provide valid credentials');
-    // }
-
-    await login({ username, password });
+    const res = await login({ username, password });
+    if (!res.ok) {
+      setErrors(res.errors)
+    }
   };
   return (
     <>
@@ -47,11 +47,13 @@ export const Login = ({ navigation }) => {
           <CustomInput
             placeholder="Username"
             value={username}
+            errors={errors}
             setValue={setUsername}
           />
           <CustomInput
             placeholder="Password"
             value={password}
+            errors={errors}
             setValue={setPassword}
             secureTextEntry={true}
           />
