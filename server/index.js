@@ -1,4 +1,5 @@
-require("dotenv").config();
+const path = require ('path');
+require('dotenv').config({ path: path.join(__dirname, `./.env.${process.env.NODE_ENV}`)})
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
@@ -26,8 +27,8 @@ app.use(communityRouter);
 
 //move io routes to another file
 
-const PORT = process.env.PORT || 3002;
-const DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost/hopper";
+const PORT = process.env['PORT'];
+const DATABASE_URL = process.env['DATABASE_URL'] || "mongodb://localhost/hopper";
 
 server.listen(PORT, async () => {
   try {

@@ -4,12 +4,10 @@ import io from "socket.io-client";
 import { FlatList } from "react-native-gesture-handler";
 import { useUser } from "../context/UserContext";
 import { SERVERURL } from "../utils/index.utils";
-import { HOST } from "@env";
+import { HOST, PORT } from "@env"; //
 import Message from './../components/Message';
 
-
-
-const socket = io(`http://${HOST}:3002`);
+const socket = io(`http://${HOST}:${PORT}`); 
 
 export const Messages = ({ route }) => {
   const [singleMessage, setSingleMessage] = useState("");

@@ -1,6 +1,6 @@
-import { HOST, PORT } from '@env'; // RR vscode bug needs comment for these imports
+import { HOST, PORT } from '@env'; //
 
-
+console.log(HOST, PORT)
 export const parser2 = (dataToParse) => {
   return {
     id: dataToParse[1].city_id,
