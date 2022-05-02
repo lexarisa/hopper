@@ -1,6 +1,8 @@
-import { HOST, PORT } from '@env'; //
+import config from "../../app.config";
 
-console.log(HOST, PORT)
+const HOST = config['HOST']
+const PORT = config['PORT']
+
 export const parser2 = (dataToParse) => {
   return {
     id: dataToParse[1].city_id,
@@ -38,7 +40,6 @@ export const imageParser = (dataToParse) => {
 };
 
 export const cityParser = (dataToParse) => {
-  console.log(dataToParse)
   return dataToParse.map((item) => {
     return {
       id: item.city_id,

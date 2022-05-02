@@ -71,8 +71,6 @@ export default function Message({ item, user }) {
     },
   });
 
-  console.log(styles.imageSpacing);
-
   return (
     <View style={styles.message}>
       <View style={styles.imageSpacing}>

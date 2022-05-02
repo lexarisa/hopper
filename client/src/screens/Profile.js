@@ -31,7 +31,6 @@ export const Profile = ({ navigation }) => {
   // That way we can request only the communities we need from the numbeo api. 
   useEffect(() => { 
     fetchCommunitiesJoined().then((data) => { 
-      console.log('>>>>>',data)
       setCommunitiesJoined(data)
     });
   }, [isFocused]); // why is this happening? And why re render?

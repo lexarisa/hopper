@@ -2,9 +2,10 @@ import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useFetch } from '../services/useFetch';
 import { SERVERURL } from '../utils/index.utils';
-import { UNSPLASH_ACCESS_KEY } from '@env';
 import { imageParser } from '../utils/index.utils';
+import config from '../../app.config'
 
+const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY'];
 
 export const ChatLog = ({ country, city, id }) => {
   const [chatPreview, setChatPreview] = useState('');

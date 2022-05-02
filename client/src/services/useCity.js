@@ -1,5 +1,5 @@
-import { NUMBEO_API_KEY } from '@env';
-
+import config from "../../app.config";
+const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
 
 export const useCity = () => {
   const fetchData = () => {

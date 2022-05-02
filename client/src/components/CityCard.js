@@ -1,8 +1,10 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { useFetch } from '../services/useFetch';
-import { UNSPLASH_ACCESS_KEY } from '@env';
 import { useState, useEffect } from 'react';
 import { imageParser } from '../utils/index.utils';
+import config from '../../app.config';
+
+const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY']
 
 
 export const CityCard = ({ city, country }) => {

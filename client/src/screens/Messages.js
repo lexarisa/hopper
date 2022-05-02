@@ -4,10 +4,10 @@ import io from "socket.io-client";
 import { FlatList } from "react-native-gesture-handler";
 import { useUser } from "../context/UserContext";
 import { SERVERURL } from "../utils/index.utils";
-import { HOST, PORT } from "@env"; //
 import Message from './../components/Message';
 
-const socket = io(`http://${HOST}:${PORT}`); 
+
+const socket = io(SERVERURL); 
 
 export const Messages = ({ route }) => {
   const [singleMessage, setSingleMessage] = useState("");
@@ -19,6 +19,7 @@ export const Messages = ({ route }) => {
   useEffect(() => {
     socket.emit("joinRoom", item.id, (response) => {
       if (response.ok) {
+        // console.log('ok', response.data)
         setChatMessages(response.data);
       } else {
         console.log("response", response.errors);
@@ -27,6 +28,7 @@ export const Messages = ({ route }) => {
 
     socket.on("receive-message", (response) => {
       if (response.ok) {
+        // console.log('ok', response.data)
         setChatMessages((prevMsg) => {
           return [...prevMsg, ...response.data];
         });
@@ -54,35 +56,35 @@ export const Messages = ({ route }) => {
       console.log(error);
     }
   };
-  const fetchMessages = async () => {
-    try {
-      fetch(`${SERVERURL}/messages/${item.id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Something went wrong");
-          return res.json();
-        })
-        .then((data) => {
-          setChatMessages(data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchMessages = async () => {
+  //   try {
+  //     fetch(`${SERVERURL}/messages/${item.id}`)
+  //       .then((res) => {
+  //         if (!res.ok) throw new Error("Something went wrong");
+  //         return res.json();
+  //       })
+  //       .then((data) => {
+  //         setChatMessages(data);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const postMessage = async (msg) => {
-    try {
-      fetch(`${SERVERURL}/messages`, {
-        method: "POST",
-        body: JSON.stringify(msg),
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => {
-        if (!res.ok) throw Error("Something went wrong");
-        return res.json();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const postMessage = async (msg) => {
+  //   try {
+  //     fetch(`${SERVERURL}/messages`, {
+  //       method: "POST",
+  //       body: JSON.stringify(msg),
+  //       headers: { "Content-Type": "application/json" },
+  //     }).then((res) => {
+  //       if (!res.ok) throw Error("Something went wrong");
+  //       return res.json();
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSubmitMessage = useCallback(() => {
     let textNotEmpty = singleMessage.trim().length > 0;

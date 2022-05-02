@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
-import { PORT } from '@ENV'
-console.log('POOOORT', PORT)
+import config from '../../app.config'
+const PORT = config['PORT']
 
 const socket = io(`http://192.168.1.177:${PORT}`, { autoConnect: false });
 
