@@ -13,7 +13,7 @@ import { CustomInput } from '../components/CustomInput';
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 
-export const Login = ({ navigation }) => {
+export const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -23,7 +23,7 @@ export const Login = ({ navigation }) => {
   const handleLogin = async () => {
     const res = await login({ username, password });
     if (!res.ok) {
-      setErrors(res.errors)
+      setErrors(res.errors);
     }
   };
   return (
@@ -57,7 +57,7 @@ export const Login = ({ navigation }) => {
             setValue={setPassword}
             secureTextEntry={true}
           />
-          <CustomButton text="Login" onPress={() => handleLogin()} />
+          <CustomButton role="" text="Log in" onPress={() => handleLogin()} />
 
           <Text style={styles.text}>
             Don't have an account?
