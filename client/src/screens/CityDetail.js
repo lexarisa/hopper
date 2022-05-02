@@ -1,8 +1,6 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useFetch } from '../services/useFetch';
-import { NUMBEO_API_KEY } from '@env';
-import { UNSPLASH_ACCESS_KEY } from '@env';
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { parser, parser2 } from '../utils/index.utils';
@@ -10,6 +8,11 @@ import { CustomCard } from '../components/CustomCard';
 import { FlatList } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import { imageParser } from '../utils/index.utils';
+import config from '../../app.config';
+
+
+const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
+const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY']
 
 
 export const CityDetail = ({ navigation, route }) => {

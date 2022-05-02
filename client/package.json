@@ -6,22 +6,25 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web",
+    "web": "MY_ENV=prod expo start --web",
+    "web:test": "MY_ENV=testing expo start --web",
     "eject": "expo eject"
   },
   "dependencies": {
+    "@babel/core": "^7.17.10",
     "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
+    "babel-plugin-inline-dotenv": "^1.7.0",
     "currency-symbol-map": "^5.0.1",
     "dayjs": "^1.11.1",
+    "dotenv": "^16.0.0",
     "expo": "~44.0.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
-    "react-native-dotenv": "^3.3.1",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-progress": "^5.0.0",
     "react-native-reanimated": "~2.3.1",
@@ -31,10 +34,6 @@
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "socket.io-client": "^4.4.1"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "metro-react-native-babel-preset": "^0.70.1"
   },
   "private": true
 }
