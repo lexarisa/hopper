@@ -1,6 +1,6 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useFetch } from '../services/useFetch';
+import { fetchImages } from '../services/fetchService';
 import { SERVERURL } from '../utils/index.utils';
 import { imageParser } from '../utils/index.utils';
 import config from '../../app.config'
@@ -10,16 +10,14 @@ const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY'];
 export const ChatLog = ({ country, city, id }) => {
   const [chatPreview, setChatPreview] = useState('');
   const [images, setImages] = useState([]);
-  const { fetchImages } = useFetch(
-    `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
-  );
+
 
   useEffect(() => {
     fetchMessages();
   }, []);
 
   useEffect(() => {
-    fetchImages().then(
+    fetchImages(city).then(
       (data) => {
         setImages(imageParser(data));
       },

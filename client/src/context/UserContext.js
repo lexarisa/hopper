@@ -16,16 +16,19 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(async ()=>{
-    try {
-      const key = 'HOPPER_USER';
-      const value = await AsyncStorage.getItem(key);
-      const user = value ? JSON.parse(value) :null;
-      setUser(user)
-      setIsLoggedIn(user ? true : false)
-    } catch (error) {
-      console.log(error);
+  useEffect(()=>{
+    const checkLogin = async () => {
+      try {
+        const key = 'HOPPER_USER';
+        const value = await AsyncStorage.getItem(key);
+        const user = value ? JSON.parse(value) :null;
+        setUser(user)
+        setIsLoggedIn(user ? true : false)
+      } catch (error) {
+        console.log(error);
+      }
     }
+    checkLogin()
   }, [])
 
   async function login(loginInfo) {
