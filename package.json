@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Mathinoc/hopper#readme",
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
     "@types/jest": "^27.5.0",
     "@types/react": "~17.0.21",
     "@types/react-native": "^0.67.6",
