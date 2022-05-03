@@ -1,5 +1,4 @@
-const path = require ('path');
-require('dotenv').config({ path: path.join(__dirname, `./.env.${process.env.MY_ENV}`)})
+require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const cors = require("cors");
@@ -27,17 +26,12 @@ app.use(communityRouter);
 
 //move io routes to another file
 
-const PORT = process.env['PORT'];
-const DATABASE_URL = process.env['DATABASE_URL'] || "mongodb://localhost/hopper";
+const PORT = process.env.PORT || 3002;
+const DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost/hopper";
 
 server.listen(PORT, async () => {
   try {
-
-  
-  
     io.on("connection", (socket) => {
-      console.log('CONNECTED')
-
       socket.on("sendMessage", async (msg, room) => {
         const newMessage = await saveMessage(msg);
         if (newMessage) {
@@ -49,9 +43,8 @@ server.listen(PORT, async () => {
       });
 
       socket.on("joinRoom", async (roomId, callback) => {
-        console.log('joining', roomId)
         socket.join(roomId);
-        const messages = await Chat.find({ communityId: roomId });
+        const messages = await Chat.find({ roomId });
         if (messages) {
           const response = {
             ok: true,

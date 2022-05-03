@@ -3,8 +3,9 @@ const { CommunityMember } = require('../models/communityMember.model');
 async function joinCommunity(req, res) {
   try {
     const { userId, communityId } = req.body;
+
     //check if user already in community
-    const member = await CommunityMember.findOne({userId, communityId});
+    const member = await CommunityMember.findOne({userId});
     if (member) {
       res
         .status(200)

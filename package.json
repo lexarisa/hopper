@@ -4,11 +4,14 @@
   "description": "This repo is used to do code reviews for entire projects from students.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "install": "cd server && npm i && cd ../client && npm i ",
     "client": "cd client && npx expo r -c && w",
     "server": "cd server && npm run dev",
     "server:testing": "cd server && npm run dev:testing"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,13 @@
   },
   "homepage": "https://github.com/Mathinoc/hopper#readme",
   "devDependencies": {
-    "eslint": "^8.14.0",
-    "typescript": "^4.6.4",
     "cypress": "^9.6.0",
+    "eslint": "^8.14.0",
     "jest": "^28.0.3",
-    "supertest": "^6.2.3"
+    "supertest": "^6.2.3",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "react-native": "^0.68.1"
   }
 }
