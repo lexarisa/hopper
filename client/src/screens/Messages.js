@@ -8,6 +8,9 @@ import Message from './../components/Message';
 
 
 const socket = io(SERVERURL); 
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 
 export const Messages = ({ route }) => {
   const [singleMessage, setSingleMessage] = useState("");
@@ -17,9 +20,9 @@ export const Messages = ({ route }) => {
   const { item } = route.params; //string
 
   useEffect(() => {
+    socket.connect()
     socket.emit("joinRoom", item.id, (response) => {
       if (response.ok) {
-        // console.log('ok', response.data)
         setChatMessages(response.data);
       } else {
         console.log("response", response.errors);
@@ -28,7 +31,6 @@ export const Messages = ({ route }) => {
 
     socket.on("receive-message", (response) => {
       if (response.ok) {
-        // console.log('ok', response.data)
         setChatMessages((prevMsg) => {
           return [...prevMsg, ...response.data];
         });
@@ -88,7 +90,7 @@ export const Messages = ({ route }) => {
 
   const handleSubmitMessage = useCallback(() => {
     let textNotEmpty = singleMessage.trim().length > 0;
-
+    console.log('sending message')
     if (textNotEmpty) {
       const messageModel = {
         userId: user.id,
