@@ -7,17 +7,17 @@ import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { CustomCard } from '../components/CustomCard';
 import { parser, parser2, imageParser } from '../utils/index.utils.tsx';
-
+import { IFetchCityDetailPrice } from '../interfaces/IFetchCityDetailPrice';
+import { IFetchCityDetailInfo } from '../interfaces/IFetchCityDetailInfo';
 import { fetchImages } from '../services/fetchService';
 import config from '../../app.config'
 const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
 
 export const CityDetail = ({ navigation, route }) => {
-  const [cityDetail, setCityDetail] = useState([]);
+  const [cityDetail, setCityDetail] = useState <[ IFetchCityDetailPrice[], IFetchCityDetailInfo[] ] | []> ([]);
   const { user } = useUser();
   const { item } = route.params;
   const [image, setImage] = useState([]);
-
 
   useEffect(() => {
     fetchCityDetail();
@@ -35,7 +35,7 @@ export const CityDetail = ({ navigation, route }) => {
     );
   }, []);
 
-  const fetchCityDetail = async () => {
+  const fetchCityDetail = async (): Promise<void> => {
     try {
       await Promise.all([
         fetch(
@@ -52,12 +52,13 @@ export const CityDetail = ({ navigation, route }) => {
             })
           );
         })
-        .then((data) => {
+        .then((data: any) :any => {
           setCityDetail([[...parser(data)], [parser2(data)]]);
-        });
+        })
     } catch (error) {
       console.log(error);
     }
+    return;
   };
 
   const handleJoinRoom = () => {
@@ -66,7 +67,7 @@ export const CityDetail = ({ navigation, route }) => {
 
   const averageSalary = function () {
     if (cityDetail.length > 1) {
-      const salary = cityDetail[0].filter((detail) => detail.id === 105);
+      const salary = cityDetail[0]?.filter((detail) => detail.id === 105);
       return salary;
     }
   };
