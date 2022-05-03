@@ -4,21 +4,22 @@ import io from "socket.io-client";
 import { FlatList } from "react-native-gesture-handler";
 import { useUser } from "../context/UserContext";
 import { SERVERURL } from "../utils/index.utils";
-import { HOST } from "@env";
 import Message from './../components/Message';
 
 
-
-const socket = io(`http://${HOST}:3002`);
+const socket = io(SERVERURL); 
+socket.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
 
 export const Messages = ({ route }) => {
   const [singleMessage, setSingleMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const [notification, setNotification] = useState("");
   const { user } = useUser();
-  const { item } = route.params; //string
+  const { item } = route.params;
 
   useEffect(() => {
+    socket.connect()
     socket.emit("joinRoom", item.id, (response) => {
       if (response.ok) {
         setChatMessages(response.data);
@@ -40,7 +41,6 @@ export const Messages = ({ route }) => {
     //cleanup
     return () => {
       socket.disconnect();
-      setChatMessages({});
     };
   }, []);
 
@@ -56,39 +56,10 @@ export const Messages = ({ route }) => {
       console.log(error);
     }
   };
-  const fetchMessages = async () => {
-    try {
-      fetch(`${SERVERURL}/messages/${item.id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Something went wrong");
-          return res.json();
-        })
-        .then((data) => {
-          setChatMessages(data);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const postMessage = async (msg) => {
-    try {
-      fetch(`${SERVERURL}/messages`, {
-        method: "POST",
-        body: JSON.stringify(msg),
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => {
-        if (!res.ok) throw Error("Something went wrong");
-        return res.json();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSubmitMessage = useCallback(() => {
     let textNotEmpty = singleMessage.trim().length > 0;
-
     if (textNotEmpty) {
       const messageModel = {
         userId: user.id,

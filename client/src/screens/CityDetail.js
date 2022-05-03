@@ -1,16 +1,17 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import * as Progress from 'react-native-progress';
 import { useState, useEffect } from 'react';
-import { useFetch } from '../services/useFetch';
-import { NUMBEO_API_KEY } from '@env';
-import { UNSPLASH_ACCESS_KEY } from '@env';
+
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { parser, parser2 } from '../utils/index.utils';
 import { CustomCard } from '../components/CustomCard';
-import { FlatList } from 'react-native-gesture-handler';
-import * as Progress from 'react-native-progress';
 import { imageParser } from '../utils/index.utils';
 
+import { fetchImages } from '../services/fetchService';
+import config from '../../app.config'
+const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState([]);
@@ -18,16 +19,13 @@ export const CityDetail = ({ navigation, route }) => {
   const { item } = route.params;
   const [image, setImage] = useState([]);
 
-  const { fetchImages } = useFetch(
-    `https://api.unsplash.com/search/photos?query=${item.city}&client_id=${UNSPLASH_ACCESS_KEY}`
-  );
 
   useEffect(() => {
     fetchCityDetail();
   }, []);
 
   useEffect(() => {
-    fetchImages().then(
+    fetchImages(item.city).then(
       (data) => {
         setImage(imageParser(data));
       },
@@ -127,7 +125,6 @@ export const CityDetail = ({ navigation, route }) => {
           cityDetail[1].map((item) => {
             return (
               <View key={item.id} style={styles.barCharts}>
-                {/* <ProgressBar progress={0.7} width={200} animated={true} /> */}
                 <View style={styles.bar}>
                   <Text style={styles.index}>Crime</Text>
                   <Progress.Bar
@@ -196,21 +193,11 @@ export const CityDetail = ({ navigation, route }) => {
                     width={330}
                   />
                 </View>
-                {/* <Text>Crime {Math.round(item.crimeIndex)}</Text>
-                <Text>Quality of Life: {Math.round(item.qualityOfLife)}</Text>
-                <Text>Rent: {Math.round(item.rentIndex)}</Text>
-                <Text>
-                  Restaurant Price: {Math.round(item.restaurantPriceIndex)}
-                </Text>
-                <Text>Safety: {Math.round(item.safetyIndex)}</Text>
-                <Text>Traffic: {Math.round(item.trafficIndex)}</Text> */}
+                
               </View>
             );
           })}
 
-        {/* <VictoryChart width={350}>
-          <VictoryBar data={testData} x="quarter" y="earnings" />
-        </VictoryChart> */}
         <View style={styles.button}>
           {user ? (
             <CustomButton text="Join the Community" onPress={handleJoinRoom} />

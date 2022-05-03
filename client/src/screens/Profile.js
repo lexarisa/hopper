@@ -9,16 +9,14 @@ import {
 import { useUser } from '../context/UserContext';
 import { useEffect, useState } from 'react';
 import { SERVERURL } from '../utils/index.utils';
-import { useCity } from '../services/useCity';
+import { fetchCities } from '../services/fetchService';
 import { ChatLog } from '../components/ChatLog';
 import { useIsFocused } from '@react-navigation/native';
 import { cityParser } from '../utils/index.utils';
 
 export const Profile = ({ navigation }) => {
-  const { user, logout } = useUser();
+  const { user } = useUser();
   const [communitiesJoined, setCommunitiesJoined] = useState([]);
-  // const { cities } = useCity();
-  const { fetchData } = useCity();
   const isFocused = useIsFocused();
   const [cities, setCities] = useState([]);
 
@@ -31,13 +29,12 @@ export const Profile = ({ navigation }) => {
   // That way we can request only the communities we need from the numbeo api. 
   useEffect(() => { 
     fetchCommunitiesJoined().then((data) => { 
-      console.log('>>>>>',data)
       setCommunitiesJoined(data)
     });
   }, [isFocused]); // why is this happening? And why re render?
 
   useEffect(() => {
-    fetchData().then(
+    fetchCities().then(
       (data) => {
         setCities(cityParser(data));
       },

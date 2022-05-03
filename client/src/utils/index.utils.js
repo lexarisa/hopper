@@ -1,5 +1,7 @@
-import { HOST, PORT } from '@env'; // RR vscode bug needs comment for these imports
+import config from "../../app.config";
 
+const HOST = config['HOST']
+const PORT = config['PORT']
 
 export const parser2 = (dataToParse) => {
   return {
@@ -38,7 +40,6 @@ export const imageParser = (dataToParse) => {
 };
 
 export const cityParser = (dataToParse) => {
-  console.log(dataToParse)
   return dataToParse.map((item) => {
     return {
       id: item.city_id,

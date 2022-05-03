@@ -109,7 +109,7 @@
 - assert paris, france on page  
 - assert parma, italy on page  
 - assert paramaribo, suriname on page  
-- assert Stockholm, not on page  
+- assert Stockholm, not on page
 4.
 - input pari into search field  
 - assert parma, italy not on page  

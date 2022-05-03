@@ -1,32 +1,21 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
-import { useFetch } from '../services/useFetch';
-import { UNSPLASH_ACCESS_KEY } from '@env';
+import { fetchImages } from '../services/fetchService';
 import { useState, useEffect } from 'react';
 import { imageParser } from '../utils/index.utils';
 
-
 export const CityCard = ({ city, country }) => {
   const [data, setData] = useState([]);
-  const { fetchImages } = useFetch(
-    `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
-  );
-
-  // const textColor = {
-  //   color:
-  //     parseInt(colorHex.replace('#', ''), 16) > 0xffffff / 1.1
-  //       ? 'black'
-  //       : 'white',
-  // };
 
   useEffect(() => {
-    fetchImages().then(
+    fetchImages(city).then(
       (data) => {
         setData(imageParser(data));
       },
       (e) => {
         console.log(e);
       }
-    );
+    ); 
+    return () => setData([]) 
   }, []);
 
   if (data === undefined) {
@@ -48,7 +37,6 @@ export const CityCard = ({ city, country }) => {
         </ImageBackground>
       )}
     </View>
-    // </View>
   );
 };
 

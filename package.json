@@ -6,8 +6,9 @@
   "scripts": {
     "test": "jest",
     "install": "cd server && npm i && cd ../client && npm i ",
-    "client": "cd client && npm start",
-    "server": "cd server && npm run dev"
+    "client": "cd client && npx expo r -c && w",
+    "server": "cd server && npm run dev",
+    "server:testing": "cd server && npm run dev:testing"
   },
   "jest": {
     "preset": "react-native"
