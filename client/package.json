@@ -42,7 +42,6 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/react-native": "^9.1.0",
     "@testing-library/user-event": "^14.1.1",
-    "metro-react-native-babel-preset": "^0.70.1",
     "react-test-renderer": "^17.0.1"
   },
   "private": true
