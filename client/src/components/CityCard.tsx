@@ -3,7 +3,12 @@ import { fetchImages } from '../services/fetchService';
 import { useState, useEffect } from 'react';
 import { imageParser } from '../utils/index.utils';
 
-export const CityCard = ({ city, country }) => {
+interface Props {
+  city: string;
+  country: string;
+}
+
+export const CityCard: React.FC<Props> = ({ city, country }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {

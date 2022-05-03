@@ -1,9 +1,13 @@
 import config from "../../app.config";
+import { IFetchCityDetailPrice } from "../interfaces/IFetchCityDetailPrice";
+import { IFetchCityDetailInfo, IFetchCityDetailInfoFiltered } from "../interfaces/IFetchCityDetailInfo";
+import { IFetchCity,IFetchCityFiltered } from "../interfaces/IFetchCity";
+import { IFetchImageData, IFetchImageDataFiltered } from "../interfaces/IFetchImageData";
 
 const HOST = config['HOST']
 const PORT = config['PORT']
 
-export const parser2 = (dataToParse) => {
+export const parser2 = (dataToParse: [IFetchCityDetailPrice, IFetchCityDetailInfo]): IFetchCityDetailInfoFiltered  => {
   return {
     id: dataToParse[1].city_id,
     crimeIndex: dataToParse[1].crime_index,
@@ -15,9 +19,10 @@ export const parser2 = (dataToParse) => {
   };
 };
 
-export const parser = (dataToParse) => {
+export const parser = (dataToParse: [IFetchCityDetailPrice, IFetchCityDetailInfo]): {item:string, itemPrice: number, id: number}[] => {
   const handPickedData = [1, 4, 18, 26, 27, 30, 105];
   //filter to get only the id i want
+
   return dataToParse[0].prices
     .filter((item) => handPickedData.includes(item.item_id))
     .map((item) => {
@@ -29,7 +34,7 @@ export const parser = (dataToParse) => {
     });
 };
 
-export const imageParser = (dataToParse) => {
+export const imageParser = (dataToParse: IFetchImageData): IFetchImageDataFiltered[] => {
   return dataToParse.results.map((item) => {
     return {
       id: item.user.id,
@@ -39,7 +44,7 @@ export const imageParser = (dataToParse) => {
   });
 };
 
-export const cityParser = (dataToParse) => {
+export const cityParser = (dataToParse: IFetchCity[]): IFetchCityFiltered[] => {
   return dataToParse.map((item) => {
     return {
       id: item.city_id,

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import { CityCard } from "./CityCard";
 import { fetchCities } from "../services/fetchService";
-import { cityParser } from "../utils/index.utils";
+import { cityParser } from "../utils/index.utils.tsx";
 
 
 export default function CityDashboard({navigation}) {

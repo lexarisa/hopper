@@ -1,8 +1,8 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { fetchImages } from '../services/fetchService';
-import { SERVERURL } from '../utils/index.utils';
-import { imageParser } from '../utils/index.utils';
+import { SERVERURL } from '../utils/index.utils.tsx';
+import { imageParser } from '../utils/index.utils.tsx';
 import config from '../../app.config'
 
 const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY'];

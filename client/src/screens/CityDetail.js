@@ -5,9 +5,8 @@ import { useState, useEffect } from 'react';
 
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
-import { parser, parser2 } from '../utils/index.utils';
 import { CustomCard } from '../components/CustomCard';
-import { imageParser } from '../utils/index.utils';
+import { parser, parser2, imageParser } from '../utils/index.utils.tsx';
 
 import { fetchImages } from '../services/fetchService';
 import config from '../../app.config'
@@ -27,6 +26,7 @@ export const CityDetail = ({ navigation, route }) => {
   useEffect(() => {
     fetchImages(item.city).then(
       (data) => {
+        console.log('fetchImages', data)
         setImage(imageParser(data));
       },
       (e) => {
