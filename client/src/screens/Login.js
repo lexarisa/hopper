@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   Dimensions,
   Image,
   Pressable,
