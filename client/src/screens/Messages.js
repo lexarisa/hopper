@@ -16,11 +16,11 @@ export const Messages = ({ route }) => {
   const [singleMessage, setSingleMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const { user } = useUser();
-  const { item } = route.params;
+  const { city } = route.params;
 
   useEffect(() => {
     socket.connect()
-    socket.emit("joinRoom", item.id, (response) => {
+    socket.emit("joinRoom", city.id, (response) => {
       if (response.ok) {
         setChatMessages(response.data);
       } else {
@@ -41,6 +41,8 @@ export const Messages = ({ route }) => {
     //cleanup
     return () => {
       socket.disconnect();
+      setChatMessages([]);
+      setSingleMessage("")
     };
   }, []);
 
@@ -65,11 +67,11 @@ export const Messages = ({ route }) => {
         userId: user.id,
         username: user.username,
         content: singleMessage,
-        communityId: item.id,
+        communityId: city.id,
         createdAt: new Date(),
       };
-      socket.emit("sendMessage", messageModel, item.id);
-      addUserToCommunity({ userId: user.id, communityId: item.id });
+      socket.emit("sendMessage", messageModel, city.id);
+      addUserToCommunity({ userId: user.id, communityId:  city.id });
       setSingleMessage("");
     } else {
       console.log("text empty");

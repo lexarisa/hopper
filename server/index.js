@@ -45,7 +45,7 @@ server.listen(PORT, async () => {
 
       socket.on("joinRoom", async (roomId, callback) => {
         socket.join(roomId);
-        const messages = await Chat.find({ roomId });
+        const messages = await Chat.find({ communityId: roomId });
         if (messages) {
           const response = {
             ok: true,

@@ -3,39 +3,36 @@ import { useState, useEffect, useRef } from "react";
 
 import { CityCard } from "./CityCard";
 import { fetchCities } from "../services/fetchService";
-import { cityParser } from "../utils/index.utils.tsx";
 
 
+let citiesStorage = [];
 export default function CityDashboard({ navigation }) {
-  const [cities, setCities] = useState([]);
   const [citiesOnDisplay, setCitiesOnDisplay] = useState([]);
 
   const handleSearch = (e) => {
     if (e && e.trim() !== '') {
-      const temporary = cities.slice(0, 10000);
-      const searchResult = temporary.filter((item) =>  { 
+      const temporary = citiesStorage.slice(0, 10000);
+      const searchResult = temporary.filter((city) =>  { 
         return (
-          (item.city.toLowerCase().includes(e.toLowerCase())) || 
-          (item.country.toLowerCase().includes(e.toLowerCase()))
+          (city.city.toLowerCase().includes(e.toLowerCase())) || 
+          (city.country.toLowerCase().includes(e.toLowerCase()))
         );
       });
       setCitiesOnDisplay(searchResult);
     } else {
-      setCitiesOnDisplay(cities.slice(0, 50))
+      setCitiesOnDisplay(citiesStorage.slice(0, 50))
     }
-
   };
 
   async function getCities() {
     const cities = await fetchCities();
-    const parsedCities = cityParser(cities);
-    setCities(parsedCities);
-    setCitiesOnDisplay(parsedCities.slice(0,50));
+    citiesStorage = [...cities];
+    setCitiesOnDisplay(cities.slice(0,50));
   }
 
   useEffect(() => {
     getCities();
-    return () => setCities([])
+    return () => setCitiesOnDisplay([])
   }, []);
 
   return (
@@ -52,9 +49,8 @@ export default function CityDashboard({ navigation }) {
         citiesOnDisplay.length > 0 ? (
           <View style={styles.container}>
             <FlatList
-              testID="cities"
               data={citiesOnDisplay}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(city) => city.id}
               renderItem={( {item} ) => (
                 <Pressable
                   onPress={() => navigation.navigate('CityDetail', { item })}

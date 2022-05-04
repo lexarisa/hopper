@@ -1,45 +1,32 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { fetchImages } from '../services/fetchService';
-import { SERVERURL } from '../utils/index.utils.tsx';
+import { fetchImages, fetchMessages } from '../services/fetchService';
 import { imageParser } from '../utils/index.utils.tsx';
-import config from '../../app.config'
 
-const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY'];
 
 export const ChatLog = ({ country, city, id }) => {
-  const [chatPreview, setChatPreview] = useState('');
+  const [lastMessage, setLastMessage] = useState('');
   const [images, setImages] = useState([]);
 
-
   useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  useEffect(() => {
-    fetchImages(city).then(
-      (data) => {
-        setImages(imageParser(data));
-      },
-      (e) => {
-        console.log(e);
-      }
-    );
-  }, []);
-
-  const fetchMessages = async () => {
-    try {
-      fetch(`${SERVERURL}/messages/${id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error('Something went wrong');
-          return res.json();
-        })
-        .then((data) => {
-          setChatPreview(data.slice(0, 1));
-        });
-    } catch (error) {
-      console.log(error);
+    getLastMessage()
+    .then(()=> {
+      fetchImages(city)
+      .then(
+        (images) => {
+          setImages(images);
+        }
+      );
+    });
+    return () => {
+      setImages([]);
+      setLastMessage('');
     }
+  }, []);
+
+  const getLastMessage = async () => {
+    const messages = await fetchMessages(id);
+    setLastMessage(messages[0].content);
   };
 
   return (
@@ -57,9 +44,7 @@ export const ChatLog = ({ country, city, id }) => {
         <Text style={styles.text}>
           {city}, {country}
         </Text>
-        {chatPreview.length >= 1 && (
-          <Text style={styles.chatPreview}>{chatPreview[0].content}</Text>
-        )}
+        <Text style={styles.lastMessage}>{lastMessage || ''}</Text>
       </View>
     </View>
   );
@@ -86,7 +71,7 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: 'bold',
   },
-  chatPreview: {
+  lastMessage: {
     color: '#909090',
     marginTop: 5,
   },

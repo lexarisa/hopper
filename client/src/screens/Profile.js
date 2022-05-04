@@ -8,58 +8,23 @@ import {
 } from 'react-native';
 import { useUser } from '../context/UserContext';
 import { useEffect, useState } from 'react';
-import { SERVERURL } from '../utils/index.utils';
-import { fetchCities } from '../services/fetchService';
+import { fetchCommunities} from '../services/fetchService';
 import { ChatLog } from '../components/ChatLog';
-import { useIsFocused } from '@react-navigation/native';
-import { cityParser } from '../utils/index.utils';
 
 export const Profile = ({ navigation }) => {
   const { user } = useUser();
-  const [communitiesJoined, setCommunitiesJoined] = useState([]);
-  const isFocused = useIsFocused();
-  const [cities, setCities] = useState([]);
+  const [communities, setCommunities] = useState([]);
 
-  // TODO Share cities state. 
-  // perhaps this is a case of shared state rather than another fetch?
-  // This function is requesting ALL of the cities from the api again
-  // and then mapping over all of them to remove extra data. 
-  // and then, she's only rendering the few communities that a user has joined. 
-  // Another idea is that we can add community id's onto the user model?
-  // That way we can request only the communities we need from the numbeo api. 
-  useEffect(() => { 
-    fetchCommunitiesJoined().then((data) => { 
-      setCommunitiesJoined(data)
-    });
-  }, [isFocused]); // why is this happening? And why re render?
+  const getCommunities = async () => {
+    const communities = await fetchCommunities(user.id);
+    setCommunities(communities)
+  }
 
   useEffect(() => {
-    fetchCities().then(
-      (data) => {
-        setCities(cityParser(data));
-      },
-      (e) => {
-        console.log(e);
-      }
-    );
+    getCommunities();
+    return ()=> setCommunities([]) 
   }, []);
 
-  const fetchCommunitiesJoined = () => {
-    return fetch(`${SERVERURL}/communities/${user.id}`)
-      .then((res) => (res.status < 400 ? res : Promise.reject(res)))
-      .then((data) => data.json())
-      .catch((er) => console.log(er));
-  };
-
-  const communitiesIdUsersIn = communitiesJoined.map(
-    (community) => community.communityId
-  );
-
-  const listOfCommunities = cities.filter((city) => {
-    return communitiesIdUsersIn.includes(city.id);
-  });
-
-  //how to navigate back to chatroom
   return (
     <ScrollView>
       <SafeAreaView>
@@ -71,13 +36,13 @@ export const Profile = ({ navigation }) => {
         </View>
         <Text style={styles.header}>Your Communities</Text>
         <View style={styles.container}>
-          {listOfCommunities.map((item) => {
+          {communities.length > 0 && communities.map((community) => {
             return (
               <Pressable
-                key={item.id}
-                onPress={() => navigation.navigate('MessagesPage', { item })}
+                key={community.id}
+                onPress={() => navigation.navigate('MessagesPage', { city:community })}
               >
-                <ChatLog country={item.country} city={item.city} id={item.id} />
+                <ChatLog  country={community.country} city={community.city} id={community.id} />
               </Pressable>
             );
           })}
