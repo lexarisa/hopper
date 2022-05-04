@@ -1,41 +1,42 @@
-import { View, FlatList, Pressable, TextInput, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import { View, FlatList, Pressable, TextInput, Text,  StyleSheet } from "react-native";
+import { useState, useEffect, useRef } from "react";
 
 import { CityCard } from "./CityCard";
 import { fetchCities } from "../services/fetchService";
 import { cityParser } from "../utils/index.utils.tsx";
 
 
-export default function CityDashboard({navigation}) {
+export default function CityDashboard({ navigation }) {
   const [cities, setCities] = useState([]);
-  const [search, setSearch] = useState('');
   const [citiesOnDisplay, setCitiesOnDisplay] = useState([]);
 
-  const handleSearch = () => {
-    const temporary = cities.slice(0, 10000);
-    return temporary.filter((item) => item.city.includes(search));
+  const handleSearch = (e) => {
+    if (e && e.trim() !== '') {
+      const temporary = cities.slice(0, 10000);
+      const searchResult = temporary.filter((item) =>  { 
+        return (
+          (item.city.toLowerCase().includes(e.toLowerCase())) || 
+          (item.country.toLowerCase().includes(e.toLowerCase()))
+        );
+      });
+      setCitiesOnDisplay(searchResult);
+    } else {
+      setCitiesOnDisplay(cities.slice(0, 50))
+    }
+
   };
 
-  useEffect(() => {
-    setCitiesOnDisplay(cities.slice(0, 10000));
-  }, [cities]);
+  async function getCities() {
+    const cities = await fetchCities();
+    const parsedCities = cityParser(cities);
+    setCities(parsedCities);
+    setCitiesOnDisplay(parsedCities.slice(0,50));
+  }
 
   useEffect(() => {
-    fetchCities().then(
-      (data) => {
-        setCities(cityParser(data));
-      },
-      (e) => {
-        console.log(e);
-      }
-    );
+    getCities();
     return () => setCities([])
   }, []);
-
-  useEffect(() => {
-    if (search === '') setCitiesOnDisplay(cities.slice(0, 10000));
-    else setCitiesOnDisplay(handleSearch());
-  }, [search]);
 
   return (
     <>
@@ -43,18 +44,18 @@ export default function CityDashboard({navigation}) {
         <TextInput
           style={styles.input}
           placeholder="Search for a city"
-          onChangeText={setSearch}
-          value={search}
+          onChangeText={(e) => handleSearch(e)}
         />
       </View>
 
       {
-        cities ? (
+        citiesOnDisplay.length > 0 ? (
           <View style={styles.container}>
             <FlatList
+              testID="cities"
               data={citiesOnDisplay}
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
+              renderItem={( {item} ) => (
                 <Pressable
                   onPress={() => navigation.navigate('CityDetail', { item })}
                 >
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 15,
   },
-  
+
   container: {
     justifyContent: 'space-around',
     alignItems: 'center',
