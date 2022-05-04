@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "test": "jest",
-    "start": "expo start",
+    "test": "cross-env MY_ENV=testing jest",
+    "start": "expo start --web",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "cross-env MY_ENV=prod expo start --web",
@@ -35,7 +35,6 @@
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
-    "react-native-svg": "^12.3.0",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "socket.io-client": "^4.4.1"
@@ -45,9 +44,14 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/react-native": "^9.1.0",
     "@testing-library/user-event": "^14.1.1",
+    "@types/jest": "^27.5.0",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "^0.67.6",
+    "@types/react-test-renderer": "^18.0.0",
     "cross-env": "^7.0.3",
+    "react-native-svg": "^12.3.0",
     "react-test-renderer": "^17.0.1",
-    "@types/react": "~17.0.21"
+    "typescript": "^4.6.4"
   },
   "private": true
 }

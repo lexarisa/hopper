@@ -1,23 +1,23 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import * as Progress from 'react-native-progress';
+import { Bar as ProgressBar } from 'react-native-progress';
 import { useState, useEffect } from 'react';
 
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { CustomCard } from '../components/CustomCard';
-import { parser, parser2, imageParser } from '../utils/index.utils.tsx';
-
+import { parser, parser2, imageParser } from '../utils/index.utils';
 import { fetchImages } from '../services/fetchService';
-import config from '../../app.config'
-const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
+import config from '../../app.config';
+const NUMBEO_API_KEY = config['NUMBEO_API_KEY'];
+import { IFetchCityDetailInfoFiltered } from '../interfaces/IFetchCityDetailInfo';
+const Bar = ProgressBar as any;
 
 export const CityDetail = ({ navigation, route }) => {
-  const [cityDetail, setCityDetail] = useState([]);
+  const [cityDetail, setCityDetail] = useState <[ {item:string, itemPrice: number, id: number}[], IFetchCityDetailInfoFiltered[] ] | []> ([]);
   const { user } = useUser();
   const { item } = route.params;
   const [image, setImage] = useState([]);
-
 
   useEffect(() => {
     fetchCityDetail();
@@ -35,7 +35,7 @@ export const CityDetail = ({ navigation, route }) => {
     );
   }, []);
 
-  const fetchCityDetail = async () => {
+  const fetchCityDetail = async (): Promise<void> => {
     try {
       await Promise.all([
         fetch(
@@ -52,12 +52,13 @@ export const CityDetail = ({ navigation, route }) => {
             })
           );
         })
-        .then((data) => {
+        .then((data: any) :any => {
           setCityDetail([[...parser(data)], [parser2(data)]]);
-        });
+        })
     } catch (error) {
       console.log(error);
     }
+    return;
   };
 
   const handleJoinRoom = () => {
@@ -66,7 +67,7 @@ export const CityDetail = ({ navigation, route }) => {
 
   const averageSalary = function () {
     if (cityDetail.length > 1) {
-      const salary = cityDetail[0].filter((detail) => detail.id === 105);
+      const salary = cityDetail[0]?.filter((detail) => detail.id === 105);
       return salary;
     }
   };
@@ -99,12 +100,12 @@ export const CityDetail = ({ navigation, route }) => {
           </View>
           <Text style={styles.header}>Cost of Living</Text>
         </View>
-        <View style={styles.scrollable}>
+        <View>
           {cityDetail.length > 1 && (
             <FlatList
               horizontal={true}
               data={cityDetail[0]}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <View key={item.id} style={styles.container}>
                   <CustomCard
@@ -127,7 +128,7 @@ export const CityDetail = ({ navigation, route }) => {
               <View key={item.id} style={styles.barCharts}>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Crime</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -138,7 +139,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Quality of Life</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -149,7 +150,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Rent</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -160,7 +161,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Safety</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -171,7 +172,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Restaurant Price</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     progress={
                       Math.round((item.restaurantPriceIndex / 170) * 100) / 100
@@ -184,7 +185,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Traffic</Text>
-                  <Progress.Bar
+                  <Bar
                     unfilledColor="#eceefc"
                     color="#4A56E2"
                     height={20}

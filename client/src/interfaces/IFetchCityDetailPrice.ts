@@ -7,7 +7,6 @@ export interface IFetchCityDetailPrice {
   name: string;
   prices: IPrice[];
   yearLastUpdate: number;
-
 }
 
 interface IPrice {

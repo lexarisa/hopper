@@ -2,7 +2,7 @@ import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { fetchImages } from '../services/fetchService';
 import { useState, useEffect } from 'react';
 import { imageParser } from '../utils/index.utils';
-import { parse } from 'dotenv';
+import React from 'react';
 
 interface Props {
   city: string;

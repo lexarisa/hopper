@@ -35,6 +35,7 @@ export const parser = (dataToParse: [IFetchCityDetailPrice, IFetchCityDetailInfo
 };
 
 export const imageParser = (dataToParse: IFetchImageData): IFetchImageDataFiltered[] => {
+  if (!dataToParse || !dataToParse.results) { return };
   return dataToParse.results.map((item) => {
     return {
       id: item.user.id,
@@ -45,6 +46,7 @@ export const imageParser = (dataToParse: IFetchImageData): IFetchImageDataFilter
 };
 
 export const cityParser = (dataToParse: IFetchCity[]): IFetchCityFiltered[] => {
+  if (!dataToParse) { return };
   return dataToParse.map((item) => {
     return {
       id: item.city_id,
