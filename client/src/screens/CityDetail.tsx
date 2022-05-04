@@ -1,6 +1,6 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Bar } from 'react-native-progress';
+import { Bar as ProgressBar } from 'react-native-progress';
 import { useState, useEffect } from 'react';
 
 import { CustomButton } from '../components/CustomButton';
@@ -11,6 +11,7 @@ import { fetchImages } from '../services/fetchService';
 import config from '../../app.config';
 const NUMBEO_API_KEY = config['NUMBEO_API_KEY'];
 import { IFetchCityDetailInfoFiltered } from '../interfaces/IFetchCityDetailInfo';
+const Bar = ProgressBar as any;
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState <[ {item:string, itemPrice: number, id: number}[], IFetchCityDetailInfoFiltered[] ] | []> ([]);
