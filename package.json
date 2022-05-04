@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "install": "cd server && npm i && cd ../client && npm i ",
-    "client": "cd client && npx expo r -c && w",
+    "client": "cd client && npm run start",
     "server": "cd server && npm run dev",
     "server:testing": "cd server && npm run dev:testing"
   },
