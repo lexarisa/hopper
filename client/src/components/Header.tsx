@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   headerContent: {
-    paddingVertical: 30,
-    marginVertical: 20,
+    // paddingVertical: 20,
+    // marginVertical: 20,
   },
   column: {
     marginHorizontal: 10,
@@ -53,8 +53,7 @@ const styles = StyleSheet.create({
     maxHeight: '60%',
   },
   header: {
-    height: '30%',
-    alignItems: 'flex-end',
+    height: '20%',
   },
   join: {
     borderWidth: 2,
@@ -63,7 +62,8 @@ const styles = StyleSheet.create({
   },
   headerGreeting: {
     alignSelf: 'flex-end',
-    margin: 15,
+    marginTop: 15,
+    marginRight: 15,
     paddingHorizontal: 15,
     paddingVertical: 10,
   },

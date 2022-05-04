@@ -7,7 +7,7 @@ import { CityDetail } from './CityDetail';
 import { Home } from './Home';
 import { AntDesign } from '@expo/vector-icons';
 import { useUser } from '../context/UserContext';
-import { Button, View } from 'react-native';
+import { Button, View, StyleSheet } from 'react-native';
 
 
 const ProtectedRoutesStack = createNativeStackNavigator();
@@ -52,11 +52,11 @@ const ProfileStack = () => {
           },
           headerRight: () => {
             return (
-            <View style={{marginHorizontal: 8}}>
+            <View style={[styles.logoutBtn]}>
               <Button
                 onPress={() => logout()}
                 title="Logout"
-                color="#000"
+                color="none"
               />
             </View> )
           }
@@ -93,3 +93,13 @@ export const HomeStackScreen = () => {
     </NavigationContainer>
   );
 };
+const styles = StyleSheet.create({
+  logoutBtn: {
+    marginRight: 8,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: 'white',
+    paddingHorizontal: 1,
+    paddingVertical: 1,
+  }
+})
