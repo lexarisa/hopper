@@ -2,24 +2,24 @@ import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { fetchImages } from '../services/fetchService';
 import { useState, useEffect } from 'react';
 import { imageParser } from '../utils/index.utils';
+import { parse } from 'dotenv';
 
 interface Props {
   city: string;
   country: string;
 }
 
-export const CityCard: React.FC<Props> = ({ city, country }) => {
+export const CityCard = ({ city, country }) => {
   const [data, setData] = useState([]);
 
+  const getImages = async () => {
+    const images = await fetchImages(city);
+    const parsedImages = imageParser(images);
+    setData(parsedImages);
+  };
+
   useEffect(() => {
-    fetchImages(city).then(
-      (data) => {
-        setData(imageParser(data));
-      },
-      (e) => {
-        console.log(e);
-      }
-    ); 
+    getImages();
     return () => setData([]) 
   }, []);
 
@@ -27,7 +27,7 @@ export const CityCard: React.FC<Props> = ({ city, country }) => {
     return <Text>Loading...</Text>;
   }
   return (
-    <View style={styles.container}>
+    <View testID={city} style={styles.container}>
       {data.length > 0 && (
         <ImageBackground
           source={{ uri: data[1].image }}
