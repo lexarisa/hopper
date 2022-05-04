@@ -1,14 +1,12 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Bar as ProgressBar } from 'react-native-progress';
+import { Bar } from 'react-native-progress';
 import { useState, useEffect } from 'react';
 
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { CustomCard } from '../components/CustomCard';
 import { parser, parser2, imageParser } from '../utils/index.utils';
-import { IFetchCityDetailPrice } from '../interfaces/IFetchCityDetailPrice';
-import { IFetchCityDetailInfo } from '../interfaces/IFetchCityDetailInfo';
 import { fetchImages } from '../services/fetchService';
 import config from '../../app.config';
 const NUMBEO_API_KEY = config['NUMBEO_API_KEY'];
@@ -129,7 +127,7 @@ export const CityDetail = ({ navigation, route }) => {
               <View key={item.id} style={styles.barCharts}>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Crime</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -140,7 +138,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Quality of Life</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -151,7 +149,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Rent</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -162,7 +160,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Safety</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     height={20}
                     color="#4A56E2"
@@ -173,7 +171,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Restaurant Price</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     progress={
                       Math.round((item.restaurantPriceIndex / 170) * 100) / 100
@@ -186,7 +184,7 @@ export const CityDetail = ({ navigation, route }) => {
                 </View>
                 <View style={styles.bar}>
                   <Text style={styles.index}>Traffic</Text>
-                  <ProgressBar
+                  <Bar
                     unfilledColor="#eceefc"
                     color="#4A56E2"
                     height={20}
