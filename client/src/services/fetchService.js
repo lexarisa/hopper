@@ -1,6 +1,5 @@
 import config from "../../app.config";
-import {parser, parser2 } from "../utils/index.utils";
-const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
+
 const HOST = config['HOST'];
 const PORT = config['PORT'];
 
@@ -27,25 +26,19 @@ export const fetchCities = async () => {
   }
 };
 
-export const fetchCityDetail = (city) => {
-  return Promise.all([
-    fetch(
-      `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}&currency=USD`
-    ),
-    fetch(
-      `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}`
-    ),
-  ])
-  .then((responses) => {
-    return Promise.all(
-      responses.map((response) => {
-        return response.json();
-      })
-    );
-  })
-  .then((data) => {
-    return [[...parser(data)], [parser2(data)]];
-  })
+export const fetchCityDetail = async (city) => {
+  const pricesUrl = `http://${HOST}:${PORT}/cities/${city.city}/${city.country}/details/prices`
+  const indicesUrl = `http://${HOST}:${PORT}/cities/${city.city}/${city.country}/details/indices`
+  const resPrices = await fetch(pricesUrl);
+  const resIndices = await fetch(indicesUrl);
+
+  if (resPrices.ok && resIndices.ok) {
+    const prices = await resPrices.json();
+    const indices = await resIndices.json();
+    return [[...prices], [indices]]
+  } else {
+    return [[],[]]
+  }
 };
 
 export const fetchCommunities = async (userId) => {

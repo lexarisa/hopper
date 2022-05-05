@@ -8,7 +8,8 @@ const router = Router();
 
 router.get('/cities', cityController.getCities)
 router.get('/cities/:cityName/images', cityController.getCityImages)
-router.get('/cities/:cityName/details', cityController.getCityDetails)
+router.get('/cities/:city/:country/details/prices', cityController.getCityPrices)
+router.get('/cities/:city/:country/details/indices', cityController.getCityIndices)
 
 router.post('/communities', communityController.joinCommunity);
 router.get('/communities/:userId', communityController.getCommunityMemberships);
