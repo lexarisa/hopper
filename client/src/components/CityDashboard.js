@@ -44,7 +44,6 @@ export default function CityDashboard({ navigation }) {
           onChangeText={(e) => handleSearch(e)}
         />
       </View>
-
       {
         citiesOnDisplay.length > 0 ? (
           <View style={styles.container}>
@@ -83,7 +82,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 20,
-    maxHeight: '60%',
+    maxHeight: '70%',
   },
 });
 
