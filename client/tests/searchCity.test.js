@@ -1,4 +1,3 @@
-// import { configure, shallow, mount, render} from 'enzyme';
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import CityDashboard from "../src/components/CityDashboard";
 import React from "react";
@@ -29,7 +28,7 @@ jest.mock("../src/services/fetchService", () => {
 
 
 it('Should render relevant components on search', async () => {
-  let {getByPlaceholderText,getAllByText,debug, getAllByTestId } = render(<CityDashboard /> );
+  let {getByPlaceholderText,getAllByText } = render(<CityDashboard /> );
     
   await waitFor(()=> {
     let stockholm = getAllByText(/stockholm/i);
