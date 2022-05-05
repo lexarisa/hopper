@@ -27,9 +27,9 @@ export const Profile = ({ navigation }) => {
   }, []);
  
   const image = {
-    uri: `https://gradient-avatar.glitch.me/${user.username}?size=45`,
+    uri: `https://gradient-avatar.glitch.me/${user.id}?size=45`,
   };
-  
+
   return (
     <ScrollView>
       <SafeAreaView>

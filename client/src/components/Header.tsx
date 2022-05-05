@@ -2,10 +2,8 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useUser } from "../context/UserContext";
 
 
-export default function Header({navigation}) {
-  const {isLoggedIn, user} = useUser();
-  
-  const image = { uri: ""};
+export default function Header({ navigation }) {
+  const { isLoggedIn, user } = useUser();
 
   return (
     <View style={styles.header}>

@@ -1,22 +1,30 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { fetchImages, fetchMessages } from '../services/fetchService';
+import { useIsFocused } from '@react-navigation/native';
 
 export const ChatLog = ({ country, city, id }) => {
   const [lastMessage, setLastMessage] = useState('');
   const [images, setImages] = useState([]);
+  const isFocused = useIsFocused() // Used to rerender if lastMessage has changed
 
   useEffect(() => {
+    const shouldRenderImage = lastMessage? false : true;
     getLastMessage()
     .then(()=> {
-      fetchImages(city)
-      .then((images) => { setImages(images); });
+      if (shouldRenderImage) {
+        fetchImages(city)
+        .then(
+          (images) => {
+            setImages(images);
+          }
+        );
+      }
     });
     return () => {
-      setImages([]);
       setLastMessage('');
     }
-  }, []);
+  }, [isFocused]);
 
   const getLastMessage = async () => {
     const messages = await fetchMessages(id);
