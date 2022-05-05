@@ -1,5 +1,5 @@
 import { View, FlatList, Pressable, TextInput, Text,  StyleSheet } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 import { CityCard } from "./CityCard";
 import { fetchCities } from "../services/fetchService";

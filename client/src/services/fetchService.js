@@ -1,5 +1,5 @@
 import config from "../../app.config";
-import { cityParser, imageParser } from "../utils/index.utils";
+import { cityParser, imageParser, parser, parser2 } from "../utils/index.utils";
 
 const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
 const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY']
@@ -54,4 +54,25 @@ export const fetchMessages = async (communityId) => {
   } else {
     return Promise.resolve([])
   }
+};
+
+export const fetchCityDetail = (city) => {
+  return Promise.all([
+    fetch(
+      `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}&currency=USD`
+    ),
+    fetch(
+      `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}`
+    ),
+  ])
+  .then((responses) => {
+    return Promise.all(
+      responses.map((response) => {
+        return response.json();
+      })
+    );
+  })
+  .then((data) => {
+    return [[...parser(data)], [parser2(data)]];
+  })
 };

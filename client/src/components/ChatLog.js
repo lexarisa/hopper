@@ -1,8 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { fetchImages, fetchMessages } from '../services/fetchService';
-import { imageParser } from '../utils/index.utils.tsx';
-
 
 export const ChatLog = ({ country, city, id }) => {
   const [lastMessage, setLastMessage] = useState('');
@@ -12,11 +10,7 @@ export const ChatLog = ({ country, city, id }) => {
     getLastMessage()
     .then(()=> {
       fetchImages(city)
-      .then(
-        (images) => {
-          setImages(images);
-        }
-      );
+      .then((images) => { setImages(images); });
     });
     return () => {
       setImages([]);
