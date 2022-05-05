@@ -1,7 +1,6 @@
 import { Text, View, ImageBackground, StyleSheet } from 'react-native';
 import { fetchImages } from '../services/fetchService';
 import { useState, useEffect } from 'react';
-import { imageParser } from '../utils/index.utils';
 import React from 'react';
 
 interface Props {
@@ -10,27 +9,26 @@ interface Props {
 }
 
 export const CityCard = ({ city, country }) => {
-  const [data, setData] = useState([]);
+  const [image, setImage] = useState(undefined);
 
   const getImages = async () => {
     const images = await fetchImages(city);
-    const parsedImages = imageParser(images);
-    setData(parsedImages);
+    setImage(images[1]);
   };
 
   useEffect(() => {
     getImages();
-    return () => setData([]) 
+    return () => setImage(undefined) 
   }, []);
 
-  if (data === undefined) {
+  if (image === undefined) {
     return <Text>Loading...</Text>;
   }
   return (
-    <View testID={city} style={styles.container}>
-      {data.length > 0 && (
+    <View style={styles.container}>
+      {image && (
         <ImageBackground
-          source={{ uri: data[1].image }}
+          source={{ uri: image.image }}
           style={styles.image}
           resizeMode="cover"
           imageStyle={{ borderRadius: 5 }}

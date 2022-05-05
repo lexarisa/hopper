@@ -4,10 +4,12 @@ import { useUser } from "../context/UserContext";
 
 export default function Header({navigation}) {
   const {isLoggedIn, user} = useUser();
+  
+  const image = { uri: ""};
 
   return (
     <View style={styles.header}>
-      <ImageBackground style={styles.headerBg}>
+      <View style={styles.headerBg}>
         <View style={styles.headerContent}>
           {isLoggedIn ? (
             <View style={[styles.headerGreeting]}>
@@ -20,14 +22,13 @@ export default function Header({navigation}) {
               </Pressable>
             </View>
           )}
-
           <View style={styles.tagline}>
             <Text style={styles.taglineText}>
               Discover your new remote working location
             </Text>
           </View>
         </View>
-      </ImageBackground>
+      </View>
     </View>
   )
 };

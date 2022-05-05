@@ -17,32 +17,33 @@ export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState <[ {item:string, itemPrice: number, id: number}[], IFetchCityDetailInfoFiltered[] ] | []> ([]);
   const { user } = useUser();
   const { item } = route.params;
-  const [image, setImage] = useState([]);
+  const city = item;
+  const [image, setImage] = useState<{image:string}>(null);
 
   useEffect(() => {
     fetchCityDetail();
   }, []);
 
   useEffect(() => {
-    fetchImages(item.city).then(
-      (data) => {
-        console.log('fetchImages', data)
-        setImage(imageParser(data));
+    fetchImages(city.city).then(
+      (images) => {
+        setImage(images[0]);
       },
       (e) => {
         console.log(e);
       }
     );
+    return setCityDetail([]);
   }, []);
 
   const fetchCityDetail = async (): Promise<void> => {
     try {
       await Promise.all([
         fetch(
-          `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${item.city}&country=${item.country}&currency=USD`
+          `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}&currency=USD`
         ),
         fetch(
-          `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${item.city}&country=${item.country}`
+          `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}`
         ),
       ])
         .then((responses) => {
@@ -62,7 +63,7 @@ export const CityDetail = ({ navigation, route }) => {
   };
 
   const handleJoinRoom = () => {
-    navigation.navigate('Messages', { item });
+    navigation.navigate('Messages', { city });
   };
 
   const averageSalary = function () {
@@ -75,15 +76,15 @@ export const CityDetail = ({ navigation, route }) => {
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.cityImg}>
-        {image.length > 0 && (
+        {image && (
           <View>
-            <Image source={{ uri: image[1].image }} style={styles.image} />
+            <Image source={{ uri: image.image }} style={styles.image} />
           </View>
         )}
 
         <View style={styles.cityName}>
           <Text style={styles.name}>
-            {item.city}, {item.country}
+            {city.city}, {city.country}
           </Text>
           <Text style={styles.header}>Average Monthly Salary</Text>
           <View style={styles.salaryCard}>
