@@ -1,16 +1,14 @@
-import { View, ImageBackground, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useUser } from "../context/UserContext";
 
 
-export default function Header({navigation}) {
-  const {isLoggedIn, user} = useUser();
-  
-  const image = { uri: ""};
+export default function Header({ navigation }) {
+  const { isLoggedIn, user } = useUser();
 
   return (
     <View style={styles.header}>
       <View style={styles.headerBg}>
-        <View style={styles.headerContent}>
+        <View>
           {isLoggedIn ? (
             <View style={[styles.headerGreeting]}>
               <Text style={styles.joinText}>Hello, {user.username}</Text>
@@ -39,10 +37,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     marginHorizontal: 15,
     borderRadius: 15,
-  },
-  headerContent: {
-    // paddingVertical: 20,
-    // marginVertical: 20,
   },
   column: {
     marginHorizontal: 10,

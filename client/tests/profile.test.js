@@ -13,27 +13,10 @@ const mocks = {
   ]
 }
 
-// jest.mock('react', () => ({
-//   ...jest.requireActual('react'),
-//   useState: jest.fn(),
-// }))
-
 
 jest.mock("../src/context/UserContext", () => ({
   useUser: () => {
     return {
-      login: (credentialObject) => {
-        if (credentialObject.username && !credentialObject.password) {
-          return {
-            ok: false,
-            errors: { username: undefined, password: "Required" },
-          };
-        }
-        return {
-          ok: false,
-          errors: { username: "Required", password: "Required" },
-        };
-      },
       user: {id: 21, username: "Alabaster"}
     };
   },
@@ -60,7 +43,9 @@ jest.mock("../src/services/fetchService", () => {
   }
 })
 
-
+jest.mock("@react-navigation/native", () => {
+  return {useIsFocused: jest.fn()}
+})
 
 
 it('Should only render joined communities', async ()=> {
