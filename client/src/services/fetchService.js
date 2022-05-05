@@ -1,17 +1,13 @@
 import config from "../../app.config";
-import { cityParser, imageParser, parser, parser2 } from "../utils/index.utils";
 
-const NUMBEO_API_KEY = config['NUMBEO_API_KEY']
-const UNSPLASH_ACCESS_KEY = config['UNSPLASH_ACCESS_KEY']
 const HOST = config['HOST'];
 const PORT = config['PORT'];
 
-export const fetchImages = async (city) => {
-  const url = `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
+export const fetchImages = async (cityName) => {
+  const url = `http://${HOST}:${PORT}/cities/${cityName}/images`;
   const res = await fetch(url);
   if (res.ok) {
-    const imagesData = await res.json();
-    const images = imageParser(imagesData);
+    const images = await res.json();
     return images;
   } else {
     return Promise.resolve([]);
@@ -19,14 +15,29 @@ export const fetchImages = async (city) => {
 };
 
 export const fetchCities = async () => {
-  const url = `https://www.numbeo.com/api/rankings_by_city_current?api_key=${NUMBEO_API_KEY}&section=1`
+  const url = `http://${HOST}:${PORT}/cities/`;
+
   const res = await fetch(url);
   if (res.ok) {
-    const citiesData = await res.json();
-    const cities = cityParser(citiesData);
+    const cities = await res.json();
     return cities;
   } else {
     return Promise.resolve([])
+  }
+};
+
+export const fetchCityDetail = async (city) => {
+  const pricesUrl = `http://${HOST}:${PORT}/cities/${city.city}/${city.country}/details/prices`
+  const indicesUrl = `http://${HOST}:${PORT}/cities/${city.city}/${city.country}/details/indices`
+  const resPrices = await fetch(pricesUrl);
+  const resIndices = await fetch(indicesUrl);
+
+  if (resPrices.ok && resIndices.ok) {
+    const prices = await resPrices.json();
+    const indices = await resIndices.json();
+    return [[...prices], [indices]]
+  } else {
+    return [[],[]]
   }
 };
 
@@ -56,23 +67,3 @@ export const fetchMessages = async (communityId) => {
   }
 };
 
-export const fetchCityDetail = (city) => {
-  return Promise.all([
-    fetch(
-      `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}&currency=USD`
-    ),
-    fetch(
-      `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}`
-    ),
-  ])
-  .then((responses) => {
-    return Promise.all(
-      responses.map((response) => {
-        return response.json();
-      })
-    );
-  })
-  .then((data) => {
-    return [[...parser(data)], [parser2(data)]];
-  })
-};

@@ -3,11 +3,13 @@ import React, { useState, useCallback, useEffect } from "react";
 import io from "socket.io-client";
 import { FlatList } from "react-native-gesture-handler";
 import { useUser } from "../context/UserContext";
-import { SERVERURL } from "../utils/index.utils";
 import Message from './../components/Message';
-
-
+import config from '../../app.config';
+const HOST = config['HOST'];
+const PORT = config['PORT'];
+const SERVERURL = `http://${HOST}:${PORT}`
 const socket = io(SERVERURL); 
+
 socket.on("connect_error", (err) => {
   console.log(`connect_error due to ${err.message}`);
 });
@@ -24,7 +26,8 @@ export const Messages = ({ route }) => {
       if (response.ok) {
         setChatMessages(response.data);
       } else {
-        console.log("response", response.errors);
+        // handle errors
+        // console.log("response", response.errors);
       }
     });
 

@@ -4,7 +4,7 @@ import { CustomCard } from '../components/CustomCard';
 
 export default function CityPriceInfo({ cityPrices }) {
 
-  const averageSalary = function () {
+  const averageSalary = () => {
     if (cityPrices) {
       const salary = cityPrices.filter((category) => category.id === 105);
       return salary[0];
