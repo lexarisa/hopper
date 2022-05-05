@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["Pressable"]
+  "cSpell.words": [
+    "Pressable"
+  ],
+  "editor.tokenColorCustomizations": {
+    "comments": "",
+    "textMateRules": []
+  }
 }

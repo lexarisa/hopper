@@ -5,95 +5,55 @@ import {
   SafeAreaView,
   ScrollView,
   Pressable,
+  ImageBackground,  
 } from 'react-native';
 import { useUser } from '../context/UserContext';
 import { useEffect, useState } from 'react';
-import { SERVERURL } from '../utils/index.utils';
-import { useCity } from '../services/useCity';
+import { fetchCommunities} from '../services/fetchService';
 import { ChatLog } from '../components/ChatLog';
-import { useIsFocused } from '@react-navigation/native';
-import { cityParser } from '../utils/index.utils';
 
 export const Profile = ({ navigation }) => {
-  const { user, logout } = useUser();
-  const [communitiesJoined, setCommunitiesJoined] = useState([]);
-  // const { cities } = useCity();
-  const { fetchData } = useCity();
-  const isFocused = useIsFocused();
-  const [cities, setCities] = useState([]);
+  const { user } = useUser();
+  const [communities, setCommunities] = useState([]);
+
+  const getCommunities = async () => {
+    const communities = await fetchCommunities(user.id);
+    setCommunities(communities)
+  }
 
   useEffect(() => {
-    fetchCommunitiesJoined().then((data) => setCommunitiesJoined(data));
-  }, [isFocused]);
-
-  useEffect(() => {
-    fetchData().then(
-      (data) => {
-        setCities(cityParser(data));
-      },
-      (e) => {
-        console.log(e);
-      }
-    );
+    getCommunities();
+    return ()=> setCommunities([]) 
   }, []);
-
-  // const fetchCommunitiesJoined = async () => {
-  //   console.log('fetchCommunitiesJoined()');
-  //   try {
-  //     const res = await fetch(`${SERVERURL}/communities/${user.id}`);
-  //     const communityMember = res.json();
-  //     console.log('>>>', communityMember);
-  //     setCommunitiesJoined(communityMember);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  const fetchCommunitiesJoined = () => {
-    console.log('fetchCommunitiesJoined()');
-
-    return fetch(`${SERVERURL}/communities/${user.id}`)
-      .then((res) => (res.status < 400 ? res : Promise.reject(res)))
-      .then((data) => data.json())
-      .catch((er) => console.log(er));
-
-    // const communityMember = res.json();
-    // console.log('>>>', communityMember);
-    // setCommunitiesJoined(communityMember);
+ 
+  const image = {
+    uri: `https://gradient-avatar.glitch.me/${user.id}?size=45`,
   };
 
-  // console.log('comJoined', communitiesJoined);
-
-  const communitiesIdUsersIn = communitiesJoined.map(
-    (community) => community.communityId
-  );
-  // console.log('comIn', communitiesIdUsersIn);
-
-  const listOfCommunities = cities.filter((city) => {
-    return communitiesIdUsersIn.includes(city.id);
-  });
-
-  //how to navigate back to chatroom
-
-  console.log('>>>>', listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>
         <View style={styles.user}>
-          <View style={styles.userImg}>
-            <Text style={styles.username}>{user.username.charAt(0)}</Text>
+          <View style={styles.userImgContainer}>
+            <ImageBackground
+              source={image}
+              style={styles.userImg}
+              imageStyle={{ borderRadius: 35 }}
+            >
+              <Text style={styles.username}>{user.username.charAt(0)}</Text>
+            </ImageBackground>
           </View>
           <Text style={styles.greeting}>Hello, {user.username}</Text>
         </View>
         <Text style={styles.header}>Your Communities</Text>
         <View style={styles.container}>
-          {listOfCommunities.map((item) => {
+          {communities.length > 0 && communities.map((community) => {
             return (
               <Pressable
-                key={item.id}
-                onPress={() => navigation.navigate('MessagesPage', { item })}
+                key={community.id}
+                onPress={() => navigation.navigate('MessagesPage', { city:community })}
               >
-                <ChatLog country={item.country} city={item.city} id={item.id} />
+                <ChatLog  country={community.country} city={community.city} id={community.id} />
               </Pressable>
             );
           })}
@@ -105,12 +65,15 @@ export const Profile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   user: {
+    flex:1,
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 20,
     marginBottom: 10,
+    marginRight: 5
   },
   username: {
+    // position: 'absolute',
     fontWeight: 'bold',
     color: 'white',
     fontSize: 18,
@@ -120,13 +83,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 20,
   },
-  userImg: {
-    backgroundColor: '#24CCA7',
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+  userImgContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  userImg: {
+    height: 50,
+    width: 50,
+    borderRadius: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 35,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 2,
   },
 
   container: {

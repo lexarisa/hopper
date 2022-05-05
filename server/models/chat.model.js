@@ -12,4 +12,25 @@ const chatSchema = new Schema({
 
 const Chat = mongoose.model('messages', chatSchema);
 
-module.exports = { Chat };
+async function saveMessage(msg) {
+ try {
+    const { userId, communityId, content, username, createdAt } = msg;
+    
+    const newMessage = await Chat.create({
+      userId,
+      communityId,
+      content,
+      username,
+      createdAt,
+    });
+
+    return newMessage;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+
+
+module.exports = { Chat, saveMessage };

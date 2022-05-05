@@ -1,45 +1,34 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useFetch } from '../services/useFetch';
-import { SERVERURL } from '../utils/index.utils';
-import { UNSPLASH_ACCESS_KEY } from '@env';
-import { imageParser } from '../utils/index.utils';
+import { fetchImages, fetchMessages } from '../services/fetchService';
+import { useIsFocused } from '@react-navigation/native';
 
 export const ChatLog = ({ country, city, id }) => {
-  const [chatPreview, setChatPreview] = useState('');
+  const [lastMessage, setLastMessage] = useState('');
   const [images, setImages] = useState([]);
-  const { fetchImages } = useFetch(
-    `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
-  );
+  const isFocused = useIsFocused() // Used to rerender if lastMessage has changed
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  useEffect(() => {
-    fetchImages().then(
-      (data) => {
-        setImages(imageParser(data));
-      },
-      (e) => {
-        console.log(e);
+    const shouldRenderImage = lastMessage? false : true;
+    getLastMessage()
+    .then(()=> {
+      if (shouldRenderImage) {
+        fetchImages(city)
+        .then(
+          (images) => {
+            setImages(images);
+          }
+        );
       }
-    );
-  }, []);
-
-  const fetchMessages = async () => {
-    try {
-      fetch(`${SERVERURL}/messages/${id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error('Something went wrong');
-          return res.json();
-        })
-        .then((data) => {
-          setChatPreview(data.slice(0, 1));
-        });
-    } catch (error) {
-      console.log(error);
+    });
+    return () => {
+      setLastMessage('');
     }
+  }, [isFocused]);
+
+  const getLastMessage = async () => {
+    const messages = await fetchMessages(id);
+    setLastMessage(messages[0].content);
   };
 
   return (
@@ -57,9 +46,7 @@ export const ChatLog = ({ country, city, id }) => {
         <Text style={styles.text}>
           {city}, {country}
         </Text>
-        {chatPreview.length >= 1 && (
-          <Text style={styles.chatPreview}>{chatPreview[0].content}</Text>
-        )}
+        <Text style={styles.lastMessage}>{lastMessage || ''}</Text>
       </View>
     </View>
   );
@@ -86,7 +73,7 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: 'bold',
   },
-  chatPreview: {
+  lastMessage: {
     color: '#909090',
     marginTop: 5,
   },

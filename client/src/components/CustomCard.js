@@ -34,10 +34,13 @@ export const CustomCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-
+    flex:1,
+    flexDirection: 'column',
+    // alignItems: 'center',
+    height:'100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#20232a",
     borderRadius: 15,
     shadowColor: '#000000',
     shadowOpacity: 0.2,

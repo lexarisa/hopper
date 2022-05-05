@@ -1,0 +1,45 @@
+{
+  "name": "hopper",
+  "version": "1.0.0",
+  "description": "This repo is used to do code reviews for entire projects from students.",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd server && npm test && cd ../client && npm test",
+    "install": "cd server && npm i && cd ../client && npm i ",
+    "client": "cd client && npm run start",
+    "server": "cd server && npm run dev",
+    "server:testing": "cd server && npm run dev:testing"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mathinoc/hopper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mathinoc/hopper/issues"
+  },
+  "homepage": "https://github.com/Mathinoc/hopper#readme",
+  "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
+    "@types/jest": "^27.5.0",
+    "@types/react": "~17.0.21",
+    "@types/react-native": "^0.67.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "cypress": "^9.6.0",
+    "eslint": "^8.14.0",
+    "jest": "^28.0.3",
+    "supertest": "^6.2.3",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@types/jest": "^27.5.0",
+    "@types/react": "^18.0.8",
+    "@types/react-native": "^0.67.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "react-native": "^0.68.1"
+  }
+}

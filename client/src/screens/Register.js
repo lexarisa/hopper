@@ -2,7 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   Image,
   Pressable,
 } from 'react-native';
@@ -16,9 +15,13 @@ export const Register = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { createUser } = useUser();
+  const [errors, setErrors ] = useState({});
 
   const handleRegister = async () => {
-    await createUser({ username, email, password });
+    const res = await createUser({ username, email, password });
+    if (!res.ok){
+      setErrors({...res.errors})
+    } 
   };
   return (
     <>
@@ -41,12 +44,19 @@ export const Register = ({ navigation }) => {
           placeholder="Username"
           value={username}
           setValue={setUsername}
+          errors={errors}
         />
-        <CustomInput placeholder="Email" value={email} setValue={setEmail} />
+        <CustomInput 
+          placeholder="Email" 
+          value={email} 
+          errors={errors}
+          setValue={setEmail} 
+        />
         <CustomInput
           placeholder="Password"
           value={password}
           setValue={setPassword}
+          errors={errors}
           secureTextEntry={true}
         />
         <CustomButton text="Register" onPress={() => handleRegister()} />
