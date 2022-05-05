@@ -28,12 +28,19 @@ export const Login = ({navigation}) => {
   return (
     <>
       <View style={styles.container}>
+        <View style={[styles.returnBtn]}>
+          <Pressable onPress={() => navigation.navigate('Home')}>
+            <Text style={styles.joinText}>Cancel</Text>
+          </Pressable>
+        </View>
         <View style={styles.header}>
+          
           <Image
             source={require('../../assets/images/hopperLogo.png')}
             style={styles.logo}
             resizeMode="stretch"
           />
+          
           <Text style={styles.appName}>Hopper</Text>
           <Text style={styles.appTagline}>
             Discover your new remote working location
@@ -84,7 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomStartRadius: 30,
     height: '50%',
-    borderRadius: 15,
     shadowColor: '#000000',
     shadowOpacity: 0.5,
     shadowRadius: 1,
@@ -93,26 +99,41 @@ const styles = StyleSheet.create({
       width: 1,
     },
   },
+  returnBtn: {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: 'white',
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginTop: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+  },
   text: {
     color: 'grey',
     marginTop: 5,
+  },
+  joinText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   header: {
     fontSize: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingBottom: 20,
     fontWeight: 'bold',
   },
   pressable: {
     marginLeft: 7,
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
   },
   appName: {
-    marginTop: 20,
+    marginTop: 15,
     fontWeight: 'bold',
     fontSize: 35,
     color: '#1C2126',
