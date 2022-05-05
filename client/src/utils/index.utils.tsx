@@ -34,25 +34,4 @@ export const parser = (dataToParse: [IFetchCityDetailPrice, IFetchCityDetailInfo
     });
 };
 
-export const imageParser = (dataToParse: IFetchImageData): IFetchImageDataFiltered[] => {
-  if (!dataToParse || !dataToParse.results) { return };
-  return dataToParse.results.map((item) => {
-    return {
-      id: item.user.id,
-      photographer: item.user.first_name,
-      image: item.urls.regular,
-    };
-  });
-};
-
-export const cityParser = (dataToParse: IFetchCity[]): IFetchCityFiltered[] => {
-  if (!dataToParse) { return };
-  return dataToParse.map((item) => {
-    return {
-      id: item.city_id,
-      country: item.country,
-      city: item.city_name,
-    };
-  });
-};
 export const SERVERURL = `http://${HOST}:${PORT}`;
