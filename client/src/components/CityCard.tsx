@@ -18,11 +18,20 @@ export const CityCard = ({ city, country }) => {
 
   useEffect(() => {
     getImages();
-    return () => setImage(undefined) 
+    return () => setImage(undefined)
   }, []);
 
   if (image === undefined) {
-    return <Text>Loading...</Text>;
+   return (
+      <View style={styles.container}>
+        <View style={styles.loading}>
+          <View style={styles.cardContent}>
+            <Text style={[styles.loadingText]}>{city}</Text>
+            <Text style={[styles.loadingText]}>{country}</Text>
+          </View>
+        </View>
+      </View> 
+    )
   }
   return (
     <View style={styles.container}>
@@ -51,6 +60,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 145,
     width: 175,
+    borderRadius:5,
     shadowColor: '#000000',
     shadowOpacity: 0.3,
     shadowRadius: 1,
@@ -58,6 +68,28 @@ const styles = StyleSheet.create({
       height: 1,
       width: 1,
     },
+  },
+  loading: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+    margin: 5,
+    height: 145,
+    width: 175,
+    borderRadius:5,
+    backgroundColor: '#efefef',
+    shadowColor: '#000000',
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 1,
+      width: 1,
+    },
+  },
+  loadingText: {
+    fontWeight: 'bold',
+    paddingTop: 10,
+    color:"#a9a7a7"
   },
   cityName: {
     fontWeight: 'bold',
@@ -72,7 +104,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container: {
-    borderRadius: 50,
+    borderRadius: 5,
   },
   cardContent: {
     justifyContent: 'center',

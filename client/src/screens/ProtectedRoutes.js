@@ -65,6 +65,7 @@ const ProfileStack = () => {
     </ProfileStackScreen.Navigator>
   );
 };
+
 export const HomeStackScreen = () => {
   return (
     <NavigationContainer>

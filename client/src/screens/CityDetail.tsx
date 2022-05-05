@@ -1,17 +1,13 @@
 import { Text, View, Image, StyleSheet, ScrollView } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import { Bar as ProgressBar } from 'react-native-progress';
+import { Bar } from 'react-native-progress';
 import { useState, useEffect } from 'react';
 
 import { CustomButton } from '../components/CustomButton';
 import { useUser } from '../context/UserContext';
 import { CustomCard } from '../components/CustomCard';
-import { parser, parser2, imageParser } from '../utils/index.utils';
-import { fetchImages } from '../services/fetchService';
-import config from '../../app.config';
-const NUMBEO_API_KEY = config['NUMBEO_API_KEY'];
+import { fetchImages, fetchCityDetail } from '../services/fetchService';
 import { IFetchCityDetailInfoFiltered } from '../interfaces/IFetchCityDetailInfo';
-const Bar = ProgressBar as any;
 
 export const CityDetail = ({ navigation, route }) => {
   const [cityDetail, setCityDetail] = useState <[ {item:string, itemPrice: number, id: number}[], IFetchCityDetailInfoFiltered[] ] | []> ([]);
@@ -21,47 +17,16 @@ export const CityDetail = ({ navigation, route }) => {
   const [image, setImage] = useState<{image:string}>(null);
 
   useEffect(() => {
-    fetchCityDetail();
-  }, []);
-
-  useEffect(() => {
-    fetchImages(city.city).then(
-      (images) => {
-        setImage(images[0]);
-      },
-      (e) => {
-        console.log(e);
-      }
+    fetchCityDetail(city)
+      .then(details => setCityDetail(details));
+    
+    fetchImages(city.city)
+      .then((images) => {setImage(images[0]);},
     );
     return setCityDetail([]);
   }, []);
 
-  const fetchCityDetail = async (): Promise<void> => {
-    try {
-      await Promise.all([
-        fetch(
-          `https://www.numbeo.com/api/city_prices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}&currency=USD`
-        ),
-        fetch(
-          `https://www.numbeo.com/api/indices?api_key=${NUMBEO_API_KEY}&city=${city.city}&country=${city.country}`
-        ),
-      ])
-        .then((responses) => {
-          return Promise.all(
-            responses.map((response) => {
-              return response.json();
-            })
-          );
-        })
-        .then((data: any) :any => {
-          setCityDetail([[...parser(data)], [parser2(data)]]);
-        })
-    } catch (error) {
-      console.log(error);
-    }
-    return;
-  };
-
+  
   const handleJoinRoom = () => {
     navigation.navigate('Messages', { city });
   };

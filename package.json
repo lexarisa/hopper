@@ -4,7 +4,7 @@
   "description": "This repo is used to do code reviews for entire projects from students.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "cd server && npm test && cd ../client && npm test",
     "install": "cd server && npm i && cd ../client && npm i ",
     "client": "cd client && npm run start",
     "server": "cd server && npm run dev",
