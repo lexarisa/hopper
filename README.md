@@ -22,4 +22,4 @@ For the frontend run
 npm run client
 ```
 
-##### Follow the directions in the expo terminal
+Follow the directions in the expo terminal
