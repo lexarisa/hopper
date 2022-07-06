@@ -45,4 +45,5 @@ export const cityParser = (dataToParse) => {
     };
   });
 };
+
 export const SERVERURL = `http://${HOST}:3002`;

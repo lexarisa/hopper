@@ -14,17 +14,17 @@ export function UserProvider({ children }) {
 
   async function login(loginInfo) {
     try {
+      console.log('runnnniiing');
       const res = await fetch(`http://${HOST}:3002/users/login`, {
         method: 'POST',
         body: JSON.stringify(loginInfo),
         headers: { 'Content-Type': 'application/json' },
       });
       const loginUser = await res.json();
-
       setUser(loginUser);
       setIsLoggedIn(true);
     } catch (error) {
-      console.log(error);
+      console.log('error', error);
     }
   }
 
@@ -75,3 +75,5 @@ export function UserProvider({ children }) {
   const value = { login, logout, createUser, setUser, user, isLoggedIn };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
+
+// filter first before displaying

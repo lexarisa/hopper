@@ -1,9 +1,9 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useFetch } from '../services/useFetch';
-import { SERVERURL } from '../utils/index.utils';
 import { UNSPLASH_ACCESS_KEY } from '@env';
 import { imageParser } from '../utils/index.utils';
+import { HOST } from '@env';
 
 export const ChatLog = ({ country, city, id }) => {
   const [chatPreview, setChatPreview] = useState('');
@@ -11,6 +11,8 @@ export const ChatLog = ({ country, city, id }) => {
   const { fetchImages } = useFetch(
     `https://api.unsplash.com/search/photos?query=${city}&client_id=${UNSPLASH_ACCESS_KEY}`
   );
+
+  console.log(id);
 
   useEffect(() => {
     fetchMessages();
@@ -29,12 +31,13 @@ export const ChatLog = ({ country, city, id }) => {
 
   const fetchMessages = async () => {
     try {
-      fetch(`${SERVERURL}/messages/${id}`)
+      fetch(`http://${HOST}:3002/messages/${id}`)
         .then((res) => {
           if (!res.ok) throw new Error('Something went wrong');
           return res.json();
         })
         .then((data) => {
+          console.log('hiii', data);
           setChatPreview(data.slice(0, 1));
         });
     } catch (error) {
@@ -42,6 +45,7 @@ export const ChatLog = ({ country, city, id }) => {
     }
   };
 
+  console.log(chatPreview);
   return (
     <View style={styles.content}>
       <View>
@@ -49,7 +53,7 @@ export const ChatLog = ({ country, city, id }) => {
           <Image
             resizeMode="cover"
             style={styles.image}
-            source={{ uri: images[2].image }}
+            source={{ uri: images[1].image }}
           />
         )}
       </View>

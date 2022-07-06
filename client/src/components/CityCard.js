@@ -18,14 +18,19 @@ export const CityCard = ({ city, country }) => {
   // };
 
   useEffect(() => {
+    let isSubscribed = true;
     fetchImages().then(
       (data) => {
-        setData(imageParser(data));
+        if (isSubscribed) setData(imageParser(data));
       },
       (e) => {
         console.log(e);
       }
     );
+    return () => {
+      // cancel the subscription
+      isSubscribed = false;
+    };
   }, []);
 
   if (data === undefined) {

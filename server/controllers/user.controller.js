@@ -48,6 +48,7 @@ async function createNewUser(req, res) {
 
 async function login(req, res) {
   try {
+    console.log('trying to login');
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     if (user) {

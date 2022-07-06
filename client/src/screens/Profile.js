@@ -13,6 +13,7 @@ import { useCity } from '../services/useCity';
 import { ChatLog } from '../components/ChatLog';
 import { useIsFocused } from '@react-navigation/native';
 import { cityParser } from '../utils/index.utils';
+import { HOST } from '@env';
 
 export const Profile = ({ navigation }) => {
   const { user, logout } = useUser();
@@ -50,9 +51,7 @@ export const Profile = ({ navigation }) => {
   // };
 
   const fetchCommunitiesJoined = () => {
-    console.log('fetchCommunitiesJoined()');
-
-    return fetch(`${SERVERURL}/communities/${user.id}`)
+    return fetch(`http://${HOST}:3002/communities/${user.id}`)
       .then((res) => (res.status < 400 ? res : Promise.reject(res)))
       .then((data) => data.json())
       .catch((er) => console.log(er));
@@ -62,18 +61,13 @@ export const Profile = ({ navigation }) => {
     // setCommunitiesJoined(communityMember);
   };
 
-  // console.log('comJoined', communitiesJoined);
-
   const communitiesIdUsersIn = communitiesJoined.map(
     (community) => community.communityId
   );
-  // console.log('comIn', communitiesIdUsersIn);
 
   const listOfCommunities = cities.filter((city) => {
     return communitiesIdUsersIn.includes(city.id);
   });
-
-  //how to navigate back to chatroom
 
   console.log('>>>>', listOfCommunities);
   return (

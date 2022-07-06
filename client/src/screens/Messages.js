@@ -6,7 +6,6 @@ import { useUser } from '../context/UserContext';
 import { SERVERURL } from '../utils/index.utils';
 import { HOST } from '@env';
 import dayjs from 'dayjs';
-import { Feather } from '@expo/vector-icons';
 
 let advancedFormat = require('dayjs/plugin/advancedFormat');
 dayjs.extend(advancedFormat);
@@ -32,7 +31,7 @@ export const Messages = ({ route }) => {
     return () => {
       socket.disconnect();
     };
-  }, [);
+  }, []);
 
   const addUserToCommunity = async (user) => {
     try {
