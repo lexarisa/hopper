@@ -119,27 +119,6 @@ export const Messages = ({ route }) => {
   //   }
   // };
 
-  // // console.log('messageDetail', messageDetail);
-  // const combineMessageWithUser = () => {
-  //   if (messageDetail.length > 0) {
-  //     const newArray = messageDetail[0].map((item) => {
-  //       if (item.userId === messageDetail[1]._id) {
-  //         return {
-  //           userId: item.userId,
-  //           username: messageDetail[1].username,
-  //           email: messageDetail[1].email,
-  //           content: item.content,
-  //           communityId: item.communityId,
-  //         };
-  //       } else {
-  //         return item;
-  //       }
-  //     });
-
-  //     return newArray;
-  //   }
-  // };
-
   return (
     <View style={styles.container}>
       <View style={styles.chat}>

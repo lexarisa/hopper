@@ -37,7 +37,6 @@ export const ChatLog = ({ country, city, id }) => {
           return res.json();
         })
         .then((data) => {
-          console.log('hiii', data);
           setChatPreview(data.slice(0, 1));
         });
     } catch (error) {
@@ -45,7 +44,6 @@ export const ChatLog = ({ country, city, id }) => {
     }
   };
 
-  console.log(chatPreview);
   return (
     <View style={styles.content}>
       <View>

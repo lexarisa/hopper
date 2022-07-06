@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HOST } from '@env';
 
@@ -12,9 +12,13 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    const checkLogin = getData();
+    setUser(checkLogin);
+  }, []);
+
   async function login(loginInfo) {
     try {
-      console.log('runnnniiing');
       const res = await fetch(`http://${HOST}:3002/users/login`, {
         method: 'POST',
         body: JSON.stringify(loginInfo),
@@ -51,11 +55,12 @@ export function UserProvider({ children }) {
   const logout = () => {
     setIsLoggedIn(false);
     setUser(null);
+    AsyncStorage.removeItem('HOPPER_USER');
   };
 
   const storeData = async (user) => {
     try {
-      const key = JSON.stringify(user.id);
+      const key = 'HOPPER_USER';
       const jsonValue = JSON.stringify(user);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
@@ -63,9 +68,9 @@ export function UserProvider({ children }) {
     }
   };
 
-  const getData = async (user) => {
+  const getData = async () => {
     try {
-      const key = JSON.stringify(user.id);
+      const key = 'HOPPER_USER';
       const value = await AsyncStorage.getItem(key);
       return value !== null ? JSON.parse(value) : null;
     } catch (error) {

@@ -55,10 +55,6 @@ export const Profile = ({ navigation }) => {
       .then((res) => (res.status < 400 ? res : Promise.reject(res)))
       .then((data) => data.json())
       .catch((er) => console.log(er));
-
-    // const communityMember = res.json();
-    // console.log('>>>', communityMember);
-    // setCommunitiesJoined(communityMember);
   };
 
   const communitiesIdUsersIn = communitiesJoined.map(
@@ -69,7 +65,6 @@ export const Profile = ({ navigation }) => {
     return communitiesIdUsersIn.includes(city.id);
   });
 
-  console.log('>>>>', listOfCommunities);
   return (
     <ScrollView>
       <SafeAreaView>
