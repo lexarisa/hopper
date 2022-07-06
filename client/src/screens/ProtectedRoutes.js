@@ -8,6 +8,7 @@ import { Home } from './Home';
 import { AntDesign } from '@expo/vector-icons';
 import { useUser } from '../context/UserContext';
 import { View, Button, StyleSheet } from 'react-native';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 const ProtectedRoutesStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -21,8 +22,34 @@ export const ProtectedRoutes = () => {
         component={Home}
         options={{ headerShown: false }}
       />
-      <ProtectedRoutesStack.Screen name="CityDetail" component={CityDetail} />
-      <ProtectedRoutesStack.Screen name="Messages" component={Messages} />
+      <ProtectedRoutesStack.Screen
+        name="CityDetail"
+        component={CityDetail}
+        options={{
+          headerStyle: {
+            backgroundColor: '#4A56E2',
+          },
+          headerTintColor: '#fff',
+          headerTitle: 'City Detail',
+          headerTitleStyle: {
+            fontWeight: '700',
+          },
+        }}
+      />
+      <ProtectedRoutesStack.Screen
+        name="Messages"
+        component={Messages}
+        options={{
+          headerStyle: {
+            backgroundColor: '#4A56E2',
+          },
+          headerTintColor: '#fff',
+          headerTitle: 'Chat',
+          headerTitleStyle: {
+            fontWeight: '700',
+          },
+        }}
+      />
       <ProtectedRoutesStack.Screen
         name="Profile"
         component={Profile}
@@ -44,7 +71,8 @@ const ProfileStack = () => {
             backgroundColor: '#4A56E2',
           },
           headerTintColor: '#fff',
-          headerTitle: 'Profile',
+          headerTitle: 'Your Profile',
+
           headerTitleStyle: {
             fontWeight: '700',
           },
@@ -96,10 +124,9 @@ export const HomeStackScreen = () => {
 
 const styles = StyleSheet.create({
   logoutBtn: {
-    marginRight: 8,
-    borderWidth: 2,
+    marginRight: 5,
+    marginBottom: 15,
     borderRadius: 10,
-    borderColor: 'white',
     paddingHorizontal: 1,
     paddingVertical: 1,
   },

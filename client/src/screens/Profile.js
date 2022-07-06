@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
     marginBottom: 10,
+    marginTop: 20,
   },
   username: {
     fontWeight: 'bold',
